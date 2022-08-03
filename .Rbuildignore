@@ -9,3 +9,4 @@ data_pipeline.R
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.github$
