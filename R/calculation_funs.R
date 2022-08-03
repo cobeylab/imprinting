@@ -11,7 +11,7 @@ INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package =
 #' @param birth_year year of birth (numeric). Must be between 1918 and the current calendar year.
 #' @param observation_year year of observation, which affects the birth cohort's age.
 #' @param intensity_df data frame of annual intensities, output by [get_country_intensity_data()].
-#' @param max_year maximum year for which to output probabilities. Must be greater than or equal to observation_year.
+#' @param max_year maximum year for which to output probabilities. Must be greater than or equal to observation_year. (If in doubt, set equal to observation year.)
 #' @param baseline_annual_p_infection average annual probability of primary infection. The default, 0.28, was estimated using age-seroprevalence data in [Gostic et al. 2016](https://www.science.org/doi/10.1126/science.aag1322).
 #'
 #' @return a vector whose entries show the probability that a person born in year 0 was first infected by influenza in year 0, 1, 2, 3, ...  We only consider the first 13 probabilities. These outputs are not normalized, so the vector sum asymptotically approaches one, but is not exactly equal to one. For cohorts born <13 years prior to the year of observation, the output vector will have less than 13 entries.
@@ -32,6 +32,7 @@ INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package =
 #'   intensity_df = get_country_intensity_data("Mexico", 2022),
 #'   max_year = 2022
 #' )
+#' @export
 get_p_infection_year <- function(birth_year,
                                  observation_year, ## Year of data collection, which matters if observation_year is shortly after birth_year
                                  intensity_df,
@@ -221,7 +222,7 @@ get_imprinting_probabilities <- function(observation_years,
 
   if (df_format == "wide") {
     return(to_long_df(outlist) %>%
-      pivot_wider(id_cols = c(year, country, birth_year), names_from = subtype, values_from = imprinting_prob))
+      tidyr::pivot_wider(id_cols = c(year, country, birth_year), names_from = subtype, values_from = imprinting_prob))
   } else {
     stopifnot(df_format == "long")
     return(to_long_df(outlist))
