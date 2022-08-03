@@ -2,10 +2,10 @@
 title: "intro-to-imprinting"
 output: rmarkdown::html_vignette
 vignette: >
-%\VignetteIndexEntry{intro-to-imprinting}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-  ---
+  %\VignetteIndexEntry{intro-to-imprinting}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
   
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
