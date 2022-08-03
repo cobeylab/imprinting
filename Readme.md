@@ -9,7 +9,7 @@ imprinting is an R package to reconstruct birth year-specific
 probabilities of imprinting to each subtype of influenza A, H1N1, H2N2,
 H3N2. We may add the ability to reconstruct imprinting to influenza B in
 the future. Reconstructions are done following the methods of [(Gostic
-et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322).
+et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322).
 
 -   `get_imprinting_probabilities()` returns a data frame containing
     birth year-specific probabilities of imprinting to H1N1, H2N2, or
@@ -24,7 +24,7 @@ et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322).
 
 The generated probabilities may be modified, plotted, and used in
 independent research. Please cite [(Gostic et
-al. 2016)](https://www.science.org/doi/10.1126/science.aag1322), and
+al. 2016)](https://www.science.org/doi/10.1126/science.aag1322), and
 this package (`citation("imprinting")`).
 
 # Installation
@@ -98,7 +98,7 @@ the following data:
     but country-specific influenza surveillance data are not publicly
     available for this time period. We use data on the number of
     influenza specimens that tested positive for each influenza subtype
-    in US surveillance (Table 1 of [Thompson et al. JAMA,
+    in US surveillance (Table 1 of [Thompson et al. JAMA,
     2003](https://jamanetwork.com/journals/jama/fullarticle/195750)) to
     calculate the fraction of circulation caused by each subtype.
 
@@ -121,12 +121,12 @@ kinds of data to characterize annual circulation intensity:
 
 -   **For 1918-1996**, we calculate annual intensity using the methods
     of [Gostic et
-    al. 2016](https://www.science.org/doi/10.1126/science.aag1322). From
+    al. 2016](https://www.science.org/doi/10.1126/science.aag1322). From
     1918-1976, intensity scores are informed by Pneumonia and Influenza
     excess mortaltity estimates [Housworth et
-    al. 1974](https://academic.oup.com/aje/article-abstract/100/1/40/226436),
+    al. 1974](https://academic.oup.com/aje/article-abstract/100/1/40/226436),
     and from 1976-1977, intensity scores are informed by the influenza A
-    test-positive fraction reported in Table 1 of [Thompson et al. JAMA,
+    test-positive fraction reported in Table 1 of [Thompson et al. JAMA,
     2003](https://jamanetwork.com/journals/jama/fullarticle/195750).
 
 -   For **1997-present**, we calculate country or region-specific
@@ -141,3 +141,4 @@ kinds of data to characterize annual circulation intensity:
 
 To report bugs, please file an issue with a reproducible example at
 [github.com/cobeylab/imprinting](https://github.com/cobeylab/imprinting).
+
