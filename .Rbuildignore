@@ -6,3 +6,6 @@ Readme.md
 Rplots.pdf
 shiny_app.R
 data_pipeline.R
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
