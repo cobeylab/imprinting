@@ -1,66 +1,57 @@
-This repository contains files that can be used to reconstruct birth-year specific probabilities of imprinting to influenza A, but subtype or by group, following the methods of [(Gostic et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322).
+# imprinting
 
-Imprinting probabilities are specific to the country and year of observation:
+# Overview
 
-* COUNTRY - For years 1997-present, we pull data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12) to estimate the fraction of influenza A infections caused by subyptes H1N1 and H3N2. We use country-specific data whenever there are 30 or more influenza A samples available in the country and year of interest. If sample sizes are insufficient, we pull in data from the country's [WHO region](https://en.wikipedia.org/wiki/List_of_WHO_regions).
-*  YEAR OF OBSERVATION - We asume children <13 years of age can be naive to influenza. The year of observation affects which birth years can be naive. In birth years >13 years of age, we assume that everyone has been infected at least one, and normalize so that subtype-specific imprinting probabilities sum to one [(Gostic et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322).
+imprinting is an R package to reconstruct birth year-specific probabilities of imprinting to each subtype of influenza A, H1N1, H2N2, H3N2. We may add the ability to reconstruct imprinting to influenza B in the future. Reconstructions are done following the methods of [(Gostic et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322).
 
+* `get_imprinting_probabilities()` returns a data frame containing birth year-specific probabilities of imprinting to H1N1, H2N2, or H3N2 for an individual in each input country and year of observation.
+* `show_available_countries()` lists the available countries (those with data in [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12)), with valid spellings.
+* `plot_one_country_year()` and `plot_many_country_years()` generates plots using the outputs of `get_imprinting_probabilites()`.
+
+The generated probabilities may be modified, plotted, and used in independent research. Please cite [(Gostic et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322), and this package (`citation("imprinting")`).
+
+# Installation
+
+imprinting is not yet available on CRAN, but the development version can be installed from github, using the devtools package:
+
+```
+# Install devtools
+install.packages("devtools")
+# Use devtools to install impritning from github
+devtools::install_github("cobeylab/imprinting") 
+# Load the imprinting package
+library(impriting)
+```
+
+# Usage
 
 # Data
 
-### Fraction of influenza A infections caused by A/H1N1, A/H2N2, and A/H3N2 over time
+There are two main kinds of data used to reconstruct birth year-specific imprinting probailities:
 
-* From 1918-1976, only one influenza A subtype circulated at a time, and pandemic years mark the transitions between subtypes. We assume that H1N1 caused 100% of influenza A cases from 1918-1956, that H2N2 causes 100% of influenza A cases from 1957-1967, and that H3N2 caused 100% of influenza A cases from 1968-1976.
-* From 1977-present, A/H3N2 and A/H1N1 have both caused seasonal epidemics. The fraction of influenza cases caused by either subtype varies from year to year. Data avilability has improved over time:
+## 1. Cocirculation data
 
-  * From **1977-1996**, data on the relative dominance of A/H1N1 and A/H3N2 are limited. We use United States-specific data from Table 1 of [Thompson et al. *JAMA*, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750) to estimate the fraction of flu A cases caused by each subtype. These data are stored in `processed-data/Thompson_data.csv`.
-  * From **1997-present**, we use country or region-specific surveillance data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12). We use country-specific data when more than 30 flu A specimens were reported in the year of interest, and region-specific data otherwise.
-        
-### Relative intensity of influenza circulation over time
+Cocirculation data describes the relative dominance of each influenza A subtype (H1N1, H2N2, H3N2) in circulation each year. It is informed by the following data:
 
-* TO WRITE
+* **1918-1976** Based on the available historical data, we assume only one subtype circulated each year:
 
+  * 1918-1956: H1N1
+  * 1957-1967: H2N2
+  * 1968-1976: H3N2
 
-# Workflow
+* **1977-1996** Two subtypes, H1N1 and H3N2, co-circulated globally, but country-specific influenza surveillance data are not publicly available for this time period. We use data on the number of influenza specimens that tested positive for each influenza subtype in US surveillance (Table 1 of [Thompson et al. JAMA, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750)) to calculate the fraction of circulation caused by each subtype. 
 
-All code runs in the /R/ directory.
+* **1996-present** Two subtypes, H1N1 and H3N2, continue to co-circulate globally. We pull country-specific data from WHO Flu Mart() to estimate the fraction of specimens that tested positive for subtype H1N1 or H3N2. If a country reported fewer than `min_samples` (default 30) influenza A-positive specimens in a given year, we substitute data from the country's WHO Region to ensure a sufficient sample size.
 
-* `get_imprinting_probabilities()` is the main function. It inputs a vector of observation years, a vector of country names, and the maximum year it outputs a matrix of birth year-specific imprinting probabilities for each country and observation year.  `script_calculate_imprinting_probs.R` is a script that shows example calls to `get_imprinting_probabilities()`
+## 2. Intensity data
 
-# Code
+Children are more likely to imprint in years with high levels of influenza A circulation. We define an annual intensity score to characterize annual circulation intensity, and to scale the annual probability of primary infection. By definition, a circulation intensity of 1 indicates average levels of influenza ciruclation. We use three kinds of data to characterize annual circulation intensity:
 
-* `calculation_funs.R` contains functions used to calculate imprinting probabilities.
-* `data_import_funs.R` contains functions used to import country or region-specific data on the fraction of infections caused by difference influenza A subtypes over time.
-
-# Testing
+* **For 1918-1996**, we calculate annual intensity using the methods of [Gostic et al. 2016](https://www.science.org/doi/10.1126/science.aag1322). From 1918-1976, intensity scores are informed by Pneumonia and Influenza excess mortaltity estimates [Housworth et al. 1974](https://academic.oup.com/aje/article-abstract/100/1/40/226436), and from 1976-1977, intensity scores are informed by the influenza A test-positive fraction reported in Table 1 of [Thompson et al. JAMA, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750).
 
 
-Run `devtools::test()` from R or RStudio, or Build --> "Test Package" from RStudio.
+* For **1997-present**, we calculate country or region-specific intensities using surveillance data from WHO Flu Mart. Intensity is calculated as: [fraction of processed samples positive for flu A]/[mean fraction of processed samples positive for flu A]. Country-specific data are used by default. Regional data are substituted when there are an insufficient number of country-specific specimens.
 
-Uses the [testthat](https://testthat.r-lib.org/) library.
+# Bugs
 
-
-# Developer notes
-
-* `raw-data/` contains influenza surveillance data for each [WHO region](https://en.wikipedia.org/wiki/List_of_WHO_regions), downloaded from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12).
-* `processed-data/` contains data on the scaled annual intensity of influenza circulation [(Gostic et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322), data from Table 1 of [Thompson et al. *JAMA*, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750), and a table of WHO regions and countries obtained [here](https://en.wikipedia.org/wiki/List_of_WHO_regions).
-
-# To do
-
-[x] Update readme 
-
-[x] Finish downloading data for all WHO regions
-
-[x] Check country and region names
-
-[] Unit tests
-
-[] System tests
-
-[] Plan for systematic data updates (can we automate this?)
-
-[] Plan output filestructure and format.
-
-[] Update Intensities in data and readme.
-
-[] Reformat outputs to a long data frame.
+To report bugs, please file an issue with a reproducible example at [github.com/cobeylab/imprinting](https://github.com/cobeylab/imprinting).
