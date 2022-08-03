@@ -19,7 +19,7 @@ get_p_infection_year(
 
 \item{intensity_df}{data frame of annual intensities, output by \code{\link[=get_country_intensity_data]{get_country_intensity_data()}}.}
 
-\item{max_year}{maximum year for which to output probabilities. Must be greater than or equal to observation_year.}
+\item{max_year}{maximum year for which to output probabilities. Must be greater than or equal to observation_year. (If in doubt, set equal to observation year.)}
 
 \item{baseline_annual_p_infection}{average annual probability of primary infection. The default, 0.28, was estimated using age-seroprevalence data in \href{https://www.science.org/doi/10.1126/science.aag1322}{Gostic et al. 2016}.}
 }
