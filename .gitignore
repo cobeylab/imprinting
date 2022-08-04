@@ -67,4 +67,3 @@ vignettes/*.pdf
 ## Vim
 *.swp
 inst/doc
-docs
