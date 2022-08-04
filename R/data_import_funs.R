@@ -307,7 +307,8 @@ get_country_cocirculation_data <- function(country,
       mutate(data_from = paste0("country: ", country))
     ## Get regional data for years that don't meet the threshold
     region_data <- get_regional_inputs_1997_to_present(get_WHO_region(country), max_year) %>%
-      dplyr::filter(!(Year %in% country_data$Year))
+      dplyr::filter(!(Year %in% country_data$Year))  %>%
+      mutate(data_from = paste0("region: ", get_WHO_region(country)))
 
     ## Calculate the proportions of each subtype from counts,
     ## And reformat to match the template columns
