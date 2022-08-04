@@ -62,8 +62,8 @@ plot_many_country_years <- function(imprinting_df) {
   max_obs_year <- max(years)
   min_obs_year <- min(years)
   axis_ticks <- seq(1920, max_obs_year, by = 10)
-  #replace_these <- which(axis_ticks %in% c(1960, 1970, 1980))
-  #axis_ticks[replace_these] <- c(1957, 1968, 1977) ## Replace 3 axis ticks with pandemic years
+  # replace_these <- which(axis_ticks %in% c(1960, 1970, 1980))
+  # axis_ticks[replace_these] <- c(1957, 1968, 1977) ## Replace 3 axis ticks with pandemic years
   axis_tick_labs <- sapply(axis_ticks, function(yr) {
     sprintf("%i\n%i", yr, max_obs_year - yr)
   }) # Label each tick with the birth year/current age of that cohort
@@ -100,7 +100,7 @@ plot_many_country_years <- function(imprinting_df) {
     geom_line(aes(x = age_at_observation, y = imprinting_prob, lty = as.factor(year)), color = "firebrick2") +
     xlab("Age at time of observation") +
     ylab("H3N2\nimprinting fraction") +
-    geom_text(aes(x = min_obs_year - 1968 - 2, y = 0.15, label = "1968 birth yr"), angle = 90, size = 3) +
+    geom_text(aes(x = min_obs_year - 1968 - 2, y = .25, label = "1968 birth yr"), angle = 90, size = 3) +
     scale_linetype(name = "Year of observation\n  \n \n \n ") +
     ggtitle("Aging of imprinted birth cohorts") +
     facet_grid(country ~ .) +
@@ -111,4 +111,3 @@ plot_many_country_years <- function(imprinting_df) {
   ## return an image with barplots on the left and lineplots on the right
   cowplot::plot_grid(bar_plots, line_plots, ncol = 2)
 }
-
