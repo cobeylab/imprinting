@@ -300,12 +300,12 @@ get_country_cocirculation_data <- function(country,
   check_max_year(max_year)
   template <- get_template_data()
   stopifnot(is.character(country))
-  if(length(country)>1){
-    country = country[1]
-    warning(sprintf('country must be a vector of length 1. outputting results for the first country: %s', country))
+  if (length(country) > 1) {
+    country <- country[1]
+    warning(sprintf("country must be a vector of length 1. outputting results for the first country: %s", country))
   }
 
-  if (max_year >= 1996) {
+  if (max_year > 1996) {
     ## Get country data, and only keep years in which there are enough samples to meet the threshold
     country_data <- get_country_inputs_1997_to_present(country, max_year) %>%
       dplyr::filter(n_A >= min_samples) %>%
@@ -386,9 +386,9 @@ get_country_intensity_data <- function(country,
   pre_1997_intensity <- INTENSITY_DATA %>% dplyr::filter(year <= 1997)
   ## Get country data, and only keep years in which there are enough samples to meet the threshold
   stopifnot(is.character(country))
-  if(length(country)>1){
-    country = country[1]
-    warning(sprintf('country must be a vector of length 1. outputting results for the first country: %s', country))
+  if (length(country) > 1) {
+    country <- country[1]
+    warning(sprintf("country must be a vector of length 1. outputting results for the first country: %s", country))
   }
 
   if (max_year > 1996) {
