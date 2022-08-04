@@ -390,8 +390,9 @@ get_country_intensity_data <- function(country,
       mutate(
         raw_intensity = n_A / n_processed,
         mean_intensity = mean(raw_intensity[quality_check == TRUE]),
-        intensity = ifelse(quality_check == FALSE, 1, 
-                           ifelse(mean_intensity == 0, 0, raw_intensity/mean_intensity)), ## Define intensity relative to the mean
+        intensity = ifelse(quality_check == FALSE, 1,
+          ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+        ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
 
@@ -405,8 +406,9 @@ get_country_intensity_data <- function(country,
       mutate(
         raw_intensity = n_A / n_processed,
         mean_intensity = mean(raw_intensity[quality_check == TRUE]),
-        intensity = ifelse(quality_check == FALSE, 1, 
-                           ifelse(mean_intensity == 0, 0, raw_intensity/mean_intensity)), ## Define intensity relative to the mean
+        intensity = ifelse(quality_check == FALSE, 1,
+          ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+        ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
 
@@ -434,4 +436,3 @@ get_country_intensity_data <- function(country,
   ## Format as a matrix whose column names are years
   return(full_outputs)
 }
-
