@@ -15,6 +15,9 @@
 plot_one_country_year <- function(imprinting_df,
                                   country = NULL,
                                   year = NULL) {
+  if(ncol(imprinting_df)>5){
+    stop('imprinting_df must be in long format, output from get_imprinting_probabilities()')
+  }
   ## This function plots imprinting patterns for a single country-year
   ## If the data frame contains more than one country-year, it plots the first listed
   countries <- unique(imprinting_df$country)
