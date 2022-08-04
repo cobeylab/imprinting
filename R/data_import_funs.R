@@ -299,6 +299,11 @@ get_country_cocirculation_data <- function(country,
                                            output_format = "tibble") {
   check_max_year(max_year)
   template <- get_template_data()
+  stopifnot(is.character(country))
+  if(length(country)>1){
+    country = country[1]
+    warning(sprintf('country must be a vector of length 1. outputting results for the first country: %s', country))
+  }
 
   if (max_year >= 1996) {
     ## Get country data, and only keep years in which there are enough samples to meet the threshold
@@ -380,6 +385,11 @@ get_country_intensity_data <- function(country,
   check_max_year(max_year)
   pre_1997_intensity <- INTENSITY_DATA %>% dplyr::filter(year <= 1997)
   ## Get country data, and only keep years in which there are enough samples to meet the threshold
+  stopifnot(is.character(country))
+  if(length(country)>1){
+    country = country[1]
+    warning(sprintf('country must be a vector of length 1. outputting results for the first country: %s', country))
+  }
 
   if (max_year > 1996) {
     country_data <- get_country_inputs_1997_to_present(country, max_year) %>%
@@ -390,8 +400,9 @@ get_country_intensity_data <- function(country,
       mutate(
         raw_intensity = n_A / n_processed,
         mean_intensity = mean(raw_intensity[quality_check == TRUE]),
-        intensity = ifelse(quality_check == FALSE, 1, 
-                           ifelse(mean_intensity == 0, 0, raw_intensity/mean_intensity)), ## Define intensity relative to the mean
+        intensity = ifelse(quality_check == FALSE, 1,
+          ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+        ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
 
@@ -405,8 +416,9 @@ get_country_intensity_data <- function(country,
       mutate(
         raw_intensity = n_A / n_processed,
         mean_intensity = mean(raw_intensity[quality_check == TRUE]),
-        intensity = ifelse(quality_check == FALSE, 1, 
-                           ifelse(mean_intensity == 0, 0, raw_intensity/mean_intensity)), ## Define intensity relative to the mean
+        intensity = ifelse(quality_check == FALSE, 1,
+          ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+        ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
 
@@ -434,4 +446,3 @@ get_country_intensity_data <- function(country,
   ## Format as a matrix whose column names are years
   return(full_outputs)
 }
-
