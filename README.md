@@ -4,16 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  out.width = "100%",
-  fig.path = "man/figures")
-)
-options(tibble.print_min = 5, tibble.print_max = 15)
-## Options modified from https://github.com/tidyverse/dplyr/blob/main/README.Rmd
-```
+
 
 # imprinting
 
@@ -39,7 +30,8 @@ devtools::install_github("cobeylab/imprinting")
 ```
 
 # Usage
-```{r}
+
+```r
 library(imprinting)
 
 
@@ -47,20 +39,35 @@ library(imprinting)
 probs = get_imprinting_probabilities(observation_years = c(2000, 2022),
                              countries = c('United States', 'Brazil', 'Vietnam', 'Indonesia'))
 probs
+#> # A tibble: 3,360 × 5
+#>   subtype  year country       birth_year imprinting_prob
+#>   <chr>   <int> <chr>              <int>           <dbl>
+#> 1 H1N1     2000 United States       2022               0
+#> 2 H1N1     2000 United States       2021               0
+#> 3 H1N1     2000 United States       2020               0
+#> 4 H1N1     2000 United States       2019               0
+#> 5 H1N1     2000 United States       2018               0
+#> # … with 3,355 more rows
 ```
 
-```{r}
+
+```r
 ## Plot imprinting probabilities 
 ##  - up to five countries
 ##  - show aging of birth cohorts from first to last observation year
 plot_many_country_years(probs)
 ```
 
-```{r fig.height=2}
+<img src="man/figures/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="100%" />
+
+
+```r
 ## Plot imprinting probabilities
 ##  - select the first country year in the probs tibble by default
 plot_one_country_year(probs)
 ```
+
+<img src="man/figures/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="100%" />
 
 
 # Data
