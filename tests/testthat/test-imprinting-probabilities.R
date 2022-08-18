@@ -25,6 +25,6 @@ test_that("Known, valid imprinting probabilities are returned", {
   probs <- get_imprinting_probabilities(observation_years = 2020, countries = "Canada", df_format = "long") %>%
     filter(subtype == "H1N1") %>%
     pull(imprinting_prob)
-  
+
   expect_equal(probs[1:10], c(0.0617228, 0.2165782, 0.3095202, 0.1402262, 0.4345298, 0.2954388, 0.4644255, 0.4274897, 0.3563988, 0.2927145), tolerance = 0.01)
 })
