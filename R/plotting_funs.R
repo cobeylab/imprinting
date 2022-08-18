@@ -89,7 +89,7 @@ plot_many_country_years <- function(imprinting_df) {
   line_plots <- imprinting_df %>%
     dplyr::filter(plot_number == 1) %>%
     dplyr::filter(year %in% c(max_obs_year, min_obs_year)) %>%
-    dplyr::filter(subtype %in% c("H3N2")) %>%
+    dplyr::filter(subtype %in% c("A/H3N2")) %>%
     mutate(
       age_at_observation = year - birth_year,
       pandemic_1968 = year - 1968
