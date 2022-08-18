@@ -125,106 +125,79 @@ get_imprinting_probabilities <- function(observation_years,
   infection_years <- birth_years
   nn_birth_years <- length(birth_years)
 
-  # Initialize matrices to store imprinting probabilities for each country and year
-  # Rows - which country and year are we doing the reconstruction from the persepctive of?
-  # Cols - what birth year are we estimating imprinting probabilities for?
-  H1N1_probs <- matrix(NA,
-    nrow = length(countries) * length(observation_years),
-    ncol = length(birth_years),
-    dimnames = list(paste(rep(observation_years, length(countries)), rep(countries, each = length(observation_years)), sep = ""), rev(birth_years))
-  )
-  H2N2_probs <- naive_probs <- H3N2_probs <- H1N1_probs
-
   ## For each country, get imprinting probabilities
-  for (this_country in countries) {
+  #for (this_country in countries) {
+  imprinting_probs <- lapply(countries, function(this_country){
     who_region <- get_WHO_region(this_country)
-    this_epi_data <- get_country_cocirculation_data(this_country, max_year, output_format = "matrix")
+    # get country-specific circulation intensity
     this_intensity_data <- get_country_intensity_data(this_country, max_year, min_specimens = 50)
     stopifnot(!any(is.na(this_intensity_data$intensity)))
-
-    # Extract and data from birth years of interest
-    # These describe the fraction of circulating influenza viruses isolated in a given year that were of subtype H1N1 (type1), H2N2 (type2), or H3N2 (type3)
-    H1.frac <- as.numeric(this_epi_data["A/H1N1", as.character(birth_years)])
-    H2.frac <- as.numeric(this_epi_data["A/H2N2", as.character(birth_years)])
-    H3.frac <- as.numeric(this_epi_data["A/H3N2", as.character(birth_years)])
-    names(H1.frac) <- names(H2.frac) <- names(H3.frac) <- as.character(birth_years)
-
-    ## Initialize master matrix with observation_years on rows and birth years on columns
-    country_H1_mat <- matrix(0,
-      nrow = length(observation_years),
-      ncol = length(birth_years),
-      dimnames = list((observation_years), (birth_years))
-    )
-    country_naive_mat <- country_H2_mat <- country_H3_mat <- country_H1_mat
-
-    ## Loop across observation years
-    for (jj in 1:length(observation_years)) {
-      ## Loop across birth years
+    # get circulation fractions
+    circulation_fractions = get_country_cocirculation_data(this_country, max_year) %>%
+      select(1:4)
+    if(!all(rowSums(circulation_fractions[,-1]) - 1 <= 1e-7)){
+      stop('Not all rows in the circulation fraction table sum to 1.')
+    }
+    # Calculate country-specific imprinting probs
+    lapply(1:length(observation_years), function(jj){
+      ## Loop across observation years
+      #for (jj in 1:length(observation_years)) {
       n_valid_birth_years <- observation_years[jj] - 1918 + 1
-      for (ii in 1:n_valid_birth_years) { # for all birth years elapsed up to the observation year
-        n_infection_years <- min(12, observation_years[jj] - birth_years[ii]) # first infections can occur up to age 12, or up until the current year, whichever comes first
+      # for(ii in 1:n_valid_birth_years){
+      lapply(1:n_valid_birth_years, FUN = function(ii){
+        ## Loop across birth years
+        # get possible years of first infection for this birth year
+        # first infections can occur up to age 12, or up until the current year, whichever comes first
+        n_infection_years <- min(12, observation_years[jj] - birth_years[ii]) 
+        valid_infection_years <- (birth_years[ii:(ii + n_infection_years)])
+        # get year-specific probabilities of primary infection
         inf.probs <- get_p_infection_year(
           birth_year = birth_years[ii],
           observation_year = observation_years[jj],
           baseline_annual_p_infection = 0.28,
           max_year = max_year,
           intensity_df = this_intensity_data
-        ) # Get vector of year-specific probs of first infection
+        ) 
         # If all 13 possible years of infection have passed, normalize so that the probability of imprinting from age 0-12 sums to 1
         if (length(inf.probs) == 13) inf.probs <- inf.probs / sum(inf.probs)
         # Else, don't normalize and extract the probability of remaiing naive below.
+        # Combine primary infection probabilities with data on what strains circulated each year
+        circulation_fractions %>%
+          filter(year %in% valid_infection_years) %>% # pull out relevant years of primary infection
+          mutate(p_primary_infection = inf.probs) %>%
+          pivot_longer(cols = !c(year, p_primary_infection), # reformat to long
+                       names_to = 'imprinting_type',
+                       values_to = 'type_fraction') %>%
+          group_by(imprinting_type) %>% # sum across years for each imprinting type
+          summarise(p_imprinting = sum(p_primary_infection*type_fraction)) %>%
+          pivot_wider(names_from = imprinting_type, values_from = p_imprinting) %>% # reformat to wide
+          mutate(naive = 1-round(sum(.), digits = 8)) %>% # Get remaining naive probability
+          mutate(year = observation_years[jj], # add metadata
+                 country = this_country, 
+                 birth_year = birth_years[ii]) %>% # set order of output columns
+          select(year, country, birth_year, !c(year, country, birth_year)) 
+      }) %>% # end loop across birth years
+        bind_rows()
+    }) %>% # end loop across observation years
+      bind_rows()
+  }) %>% # end loop across countries
+  bind_rows() 
 
-        # Fill in the appropriate row (observation year) and column (birth year) of the output matrix
-        # The overall probabilty of imprinting to a specific subtype for a given birth year is the dot product of year-specific probabilities of any imprinting, and the year-specific fraction of seasonal circulation caused by the subtype of interest
-        valid_infection_years <- as.character(birth_years[ii:(ii + n_infection_years)])
-        country_H1_mat[jj, ii] <- sum(inf.probs * H1.frac[valid_infection_years])
-        country_H2_mat[jj, ii] <- sum(inf.probs * H2.frac[valid_infection_years])
-        country_H3_mat[jj, ii] <- sum(inf.probs * H3.frac[valid_infection_years])
-        country_naive_mat[jj, ii] <- round(1 - sum(inf.probs), digits = 8) # Rounds to the nearest 8 to avoid machine 0 errors
-      } ## Close loop over valid birth years
-    } ## Close loop over observation years
-
-    # return the output in order of current_year:1918
-    descending_chronological_order <- as.character(max(birth_years):min(birth_years))
-    country_H1_mat <- country_H1_mat[, descending_chronological_order]
-    country_H2_mat <- country_H2_mat[, descending_chronological_order]
-    country_H3_mat <- country_H3_mat[, descending_chronological_order]
-    country_naive_mat <- country_naive_mat[, descending_chronological_order]
-
-    ##  Fill in the master matrix with country-specific outputs
-    cc <- which(countries == this_country)
-    rows_for_this_country <- ((cc - 1) * length(observation_years)) + 1:length(observation_years)
-    H1N1_probs[rows_for_this_country, ] <- country_H1_mat
-    H2N2_probs[rows_for_this_country, ] <- country_H2_mat
-    H3N2_probs[rows_for_this_country, ] <- country_H3_mat
-    naive_probs[rows_for_this_country, ] <- country_naive_mat
-  } ## Close loop across countries
-
-  ## Check that the total for each birth year is 1 when rounded to 4 decimals
-  total <- H1N1_probs + H2N2_probs + H3N2_probs + naive_probs
-  if (any(!(round(total, 4) %in% c(0, 1, NA)))) {
-    warning("Weights do not sum to 1")
-  }
-
-  ## Normalize so that sum of weights is exactly 1 in each birth year
-  total[which(total == 0)] <- 1 # Reset 0 values so as not to divide by 0
-  H1N1_probs <- H1N1_probs / (total)
-  H2N2_probs <- H2N2_probs / (total)
-  H3N2_probs <- H3N2_probs / (total)
-  naive_probs <- naive_probs / (total)
-
-  outlist <- list(
-    H1N1_probs = H1N1_probs,
-    H2N2_probs = H2N2_probs,
-    H3N2_probs = H3N2_probs,
-    naive_probs = naive_probs
+if (df_format == "wide") {
+  return(imprinting_probs)
+} else {
+  stopifnot(df_format == "long")
+  return(imprinting_probs %>%
+           pivot_longer(-c(1:3), 
+                        names_to = 'subtype',
+                        values_to = 'imprinting_prob')%>%
+           arrange(subtype, desc(birth_year))
   )
-
-  if (df_format == "wide") {
-    return(to_long_df(outlist) %>%
-      tidyr::pivot_wider(id_cols = c(year, country, birth_year), names_from = subtype, values_from = imprinting_prob))
-  } else {
-    stopifnot(df_format == "long")
-    return(to_long_df(outlist))
-  }
 }
+}
+
+## Tomorrow:
+## Test on flu A
+## Modify to input arbitrary matrix
+## Change names of long output df
+
