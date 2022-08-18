@@ -177,7 +177,8 @@ get_template_data <- function() {
       group2 = `A/H3N2`,
       A = `A/H1N1` + `A/H2N2` + `A/H3N2`
     ) %>%
-    select(year, starts_with("A"), starts_with("B"), starts_with("group"), data_from)
+    select(year, starts_with("A"), starts_with("B"), starts_with("group"), data_from) %>%
+    filter(year < 1997)
   ## Test
   test_rowsums_group(template$group1, template$group2)
   test_rowsums_subtype(template$`A/H1N1`, template$`A/H2N2`, template$`A/H3N2`)
