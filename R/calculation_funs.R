@@ -175,12 +175,15 @@ get_imprinting_probabilities <- function(observation_years,
     # Calculate country-specific imprinting probs
     lapply(1:length(observation_years), function(jj) {
       ## Loop across birth years
-      lapply(1918:max_year, FUN = function(bb){
-        get_probs_one_birth_year(this_birth_year = bb, 
-                                 this_observation_year = observation_years[jj], 
-                                 max_year = max_year, 
-                                 this_intensity_data = this_intensity_data, 
-                                 these_annual_frequencies = these_annual_frequencies)}) %>% 
+      lapply(1918:max_year, FUN = function(bb) {
+        get_probs_one_birth_year(
+          this_birth_year = bb,
+          this_observation_year = observation_years[jj],
+          max_year = max_year,
+          this_intensity_data = this_intensity_data,
+          these_annual_frequencies = these_annual_frequencies
+        )
+      }) %>%
         bind_rows()
     }) %>% # end loop across observation years
       bind_rows() %>%
@@ -188,7 +191,7 @@ get_imprinting_probabilities <- function(observation_years,
   }) %>% # end loop across countries
     bind_rows() %>%
     select(year, country, birth_year, !c(year, country, birth_year))
-    
+
 
   if (df_format == "wide") {
     return(imprinting_probs)
@@ -204,17 +207,16 @@ get_imprinting_probabilities <- function(observation_years,
 }
 
 
-get_probs_one_birth_year = function(this_birth_year, 
-                                    this_observation_year,
-                                    max_year,
-                                    this_intensity_data,
-                                    these_annual_frequencies
-){
+get_probs_one_birth_year <- function(this_birth_year,
+                                     this_observation_year,
+                                     max_year,
+                                     this_intensity_data,
+                                     these_annual_frequencies) {
   ## Loop across birth years
   # get possible years of first infection for this birth year
   # first infections can occur up to age 12, or up until the current year, whichever comes first
   n_infection_years <- min(12, this_observation_year - this_birth_year)
-  valid_infection_years <- this_birth_year+(0:n_infection_years)
+  valid_infection_years <- this_birth_year + (0:n_infection_years)
   # get year-specific probabilities of primary infection
   inf.probs <- get_p_infection_year(
     birth_year = this_birth_year,
@@ -227,14 +229,15 @@ get_probs_one_birth_year = function(this_birth_year,
   if (length(inf.probs) == 13) inf.probs <- inf.probs / sum(inf.probs)
   # Else, don't normalize and extract the probability of remaiing naive below.
   # Combine primary infection probabilities with data on what strains circulated each year
-  freq_mat = these_annual_frequencies %>%
+  freq_mat <- these_annual_frequencies %>%
     filter(year %in% valid_infection_years) %>% # pull out relevant years of primary infection
     select(-1) %>%
     as.matrix()
-  imprinting_probs = colSums(freq_mat*inf.probs) # Get type-specific probabilities
-  imprinting_probs = c(imprinting_probs, 'naive' = 1-sum(imprinting_probs)) # Add the naive probability
-  c(year = this_observation_year,
+  imprinting_probs <- colSums(freq_mat * inf.probs) # Get type-specific probabilities
+  imprinting_probs <- c(imprinting_probs, "naive" = 1 - sum(imprinting_probs)) # Add the naive probability
+  c(
+    year = this_observation_year,
     birth_year = this_birth_year,
-    imprinting_probs)
+    imprinting_probs
+  )
 }
-
