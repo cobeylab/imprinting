@@ -99,8 +99,8 @@ to_long_df <- function(outlist) {
 #' @details Imprinting probabilities are calculated following [Gostic et al. 2016](https://www.science.org/doi/10.1126/science.aag1322). Briefly, the model first calculates the probability that an individual's first influenza infection occurs 0, 1, 2, ... 12 years after birth using a modified geometric waiting time model. The annual circulation intensities output by [get_country_intensity_data()] scale the probability of primary infection in each calendar year.
 #'
 #' Then, after calculating the probability of imprinting 0, 1, 2, ... calendar years after birth, the model uses data on which subtypes circulated in each calendar year (from [get_country_cocirculation_data()]) to estimate that probability that a first infection was caused by each subtype. See [get_country_cocirculation_data()] for details about the underlying data sources.
-#' 
-#' To calculate other kinds of imprinting probabilities (e.g. for specific clades, strains, or to include pediatric vaccination), users can specify custom circulation frequencies as a list, [annual_frequencies]. This list must contain one named element for each country in the [countries] input vector. Each list element must be a data frame or tibble whose first column is named "year" and contains numeric years from 1918:max([observation_years]). Columns 2:N of the data frame must contain circulation frequencies that sum to 1 across each row, and each column must have a unique name indicating the exposure kind. E.g. column names could be {"year", "H1N1", "H2N2", "H3N2", "vaccinated"} to include probabilities of imprinting by vaccine, or {"year", "3C.3A", "not_3C.3A"} to calculate clade-specific probabilities.  Do not include a naive column. Any number of imprinting types is allowed, but the code is not optimized to run efficiently when the number of categories is very large. Frequencies within the column must be supplied by the user. See [Vieira et al. 2021](https://www.nature.com/articles/s41467-021-24566-y) for methods to estimate circulation frequencies from sequence databases like [GISAID](https://gisaid.org/) or the [NCBI Sequence Database](https://www.ncbi.nlm.nih.gov/genomes/FLU/Database/nph-select.cgi?go=database). 
+#'
+#' To calculate other kinds of imprinting probabilities (e.g. for specific clades, strains, or to include pediatric vaccination), users can specify custom circulation frequencies as a list, [annual_frequencies]. This list must contain one named element for each country in the [countries] input vector. Each list element must be a data frame or tibble whose first column is named "year" and contains numeric years from 1918:max([observation_years]). Columns 2:N of the data frame must contain circulation frequencies that sum to 1 across each row, and each column must have a unique name indicating the exposure kind. E.g. column names could be {"year", "H1N1", "H2N2", "H3N2", "vaccinated"} to include probabilities of imprinting by vaccine, or {"year", "3C.3A", "not_3C.3A"} to calculate clade-specific probabilities.  Do not include a naive column. Any number of imprinting types is allowed, but the code is not optimized to run efficiently when the number of categories is very large. Frequencies within the column must be supplied by the user. See [Vieira et al. 2021](https://www.nature.com/articles/s41467-021-24566-y) for methods to estimate circulation frequencies from sequence databases like [GISAID](https://gisaid.org/) or the [NCBI Sequence Database](https://www.ncbi.nlm.nih.gov/genomes/FLU/Database/nph-select.cgi?go=database).
 #'
 #' @return
 #' * If `format=long` (the default), a long tibble with columns showing the imprinting subtype (H1N1, H2N2, H3N2, or naive), the year of observation, the country, the birth year, and the imprinting probability.
@@ -127,39 +127,39 @@ get_imprinting_probabilities <- function(observation_years,
   infection_years <- birth_years
   nn_birth_years <- length(birth_years)
   ## annual frequencies
-  if(length(annual_frequencies)==0){ # If no custom inputs given
+  if (length(annual_frequencies) == 0) { # If no custom inputs given
     annual_frequencies <- lapply(countries, function(cc) {
       get_country_cocirculation_data(cc, max_year) %>%
-      select(1:4)
+        select(1:4)
     })
-    names(annual_frequencies) = countries
+    names(annual_frequencies) <- countries
   }
   # ## Check annual frequencies list
   # Must be a list
-  if(!is.list(annual_frequencies)){
+  if (!is.list(annual_frequencies)) {
     stop("annual_frequencies must be a named list. See Details in ?get_imprinting_probabilities.")
-  } 
+  }
   # List must be named, names must match `countries`
-  if(!all(countries %in% names(annual_frequencies))){
+  if (!all(countries %in% names(annual_frequencies))) {
     stop("annual_frequencies must be a named list whose names match the countries input vector. See Details in ?get_imprinting_probabilities.")
-  } 
+  }
   # All data frames within the list must contain the year column
-  if(!all(sapply(annual_frequencies, function(ll){ 
-      # All data frames contain a column, year
-      names(ll)[1] == 'year'
-  }))){
+  if (!all(sapply(annual_frequencies, function(ll) {
+    # All data frames contain a column, year
+    names(ll)[1] == "year"
+  }))) {
     stop("The first column of all data frames in annual_frequencies must be named `year`.")
   }
-  if(!all(sapply(annual_frequencies, function(ll){ 
-      # All year columns contain years 1918:max_year
-      all(1918:max_year %in% ll$year)
-  }))){
+  if (!all(sapply(annual_frequencies, function(ll) {
+    # All year columns contain years 1918:max_year
+    all(1918:max_year %in% ll$year)
+  }))) {
     stop("The `year` column of all data frames in annual_frequencies must contain numeric values from 1918:max(observation_years)")
   }
-  if(!all(sapply(annual_frequencies, function(ll){ 
-      # All type frequencies sum to 1 within each row (year)
-      all(abs(rowSums(ll[,-1])-1) <= 1e-7)
-  }))){
+  if (!all(sapply(annual_frequencies, function(ll) {
+    # All type frequencies sum to 1 within each row (year)
+    all(abs(rowSums(ll[, -1]) - 1) <= 1e-7)
+  }))) {
     stop("Each row in the annual_frequencies data frames (not including the year column) must sum to 1.")
   }
 
@@ -171,7 +171,7 @@ get_imprinting_probabilities <- function(observation_years,
     this_intensity_data <- get_country_intensity_data(this_country, max_year, min_specimens = 50)
     stopifnot(!any(is.na(this_intensity_data$intensity)))
     # get circulation fractions
-    these_annual_frequencies = annual_frequencies[[this_country]]
+    these_annual_frequencies <- annual_frequencies[[this_country]]
     # Calculate country-specific imprinting probs
     lapply(1:length(observation_years), function(jj) {
       ## Loop across observation years
