@@ -253,7 +253,7 @@ get_country_inputs_1997_to_present <- function(country,
     stop(sprintf('No files found for region: "%s" \nValid regions are: %s\nSee https://en.wikipedia.org/wiki/List_of_WHO_regions for a list of WHO regions.\nNew data files can be obtained at WHO FluMart - https://apps.who.int/flumart/Default?ReportNo=12', who_region, paste(valid_regions, sep = ", ")))
   }
   if (max_year <= 1996) {
-    warning("Country-specific data are not available prior to 1996. Returning a NULL result.")
+    warning("Country-specific data are not available prior to 1997. Returning a NULL result.")
     return(NULL)
   }
   country_data <- readRDS(system.file("extdata", "country_data.rds", package = "imprinting"))
