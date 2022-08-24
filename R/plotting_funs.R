@@ -12,30 +12,37 @@
 #' imprinting_df <- get_imprinting_probabilities(observation_years = 1997, countries = c("Algeria", "South Africa"))
 #' plot_one_country_year(imprinting_df)
 #' @export
-plot_one_country_year <- function(imprinting_df) {
+plot_one_country_year <- function(imprinting_df,
+                                  country = NULL,
+                                  year = NULL) {
+  if (ncol(imprinting_df) > 5) {
+    stop("imprinting_df must be in long format, output from get_imprinting_probabilities()")
+  }
   ## This function plots imprinting patterns for a single country-year
   ## If the data frame contains more than one country-year, it plots the first listed
   countries <- unique(imprinting_df$country)
   years <- unique(imprinting_df$year)
-  obs_year <- years[1]
+  obs_year <- ifelse(length(year) == 0, years[1], year)
+  this_country <- ifelse(length(country) == 0, countries[1], country)
   axis_ticks <- seq(1920, obs_year, by = 10)
   replace_these <- which(axis_ticks %in% c(1960, 1970, 1980))
   axis_ticks[replace_these] <- c(1957, 1968, 1977) ## Replace 3 axis ticks with pandemic years
   axis_tick_labs <- sapply(axis_ticks, function(yr) {
     sprintf("%i\n%i", yr, obs_year - yr)
   }) # Label each tick with the birth year/current age of that cohort
-  x_axis_text <- sprintf("birth year\nage in %s", obs_year) ## Axis label is birth year[newline]age now
+  x_axis_text <- sprintf("Birth year\nAge in %s", obs_year) ## Axis label is birth year[newline]age now
   colors <- c("dodgerblue1", "lightblue", "firebrick2", "gray")
   imprinting_df %>%
-    dplyr::filter(country == countries[1]) %>%
+    dplyr::filter(country == this_country) %>%
     dplyr::filter(year == obs_year) %>%
+    dplyr::filter(birth_year <= obs_year) %>%
     ggplot() +
     geom_bar(aes(x = birth_year, y = imprinting_prob, fill = subtype), stat = "identity") +
     xlab(x_axis_text) +
-    ylab("imprinting fraction") +
+    ylab("Imprinting fraction") +
     scale_color_manual(values = colors, aesthetics = c("color", "fill")) +
     scale_x_continuous(breaks = axis_ticks, labels = axis_tick_labs) +
-    ggtitle(sprintf("Probabilities for %s in %i", countries[1], obs_year))
+    ggtitle(sprintf("Probabilities for %s in %i", country, obs_year))
 }
 
 
@@ -54,6 +61,9 @@ plot_one_country_year <- function(imprinting_df) {
 #' plot_many_country_years(imprinting_df)
 #' @export
 plot_many_country_years <- function(imprinting_df) {
+  if (ncol(imprinting_df) > 5) {
+    stop("imprinting_df must be in long format, output from get_imprinting_probabilities()")
+  }
   countries <- unique(imprinting_df$country)
   if (length(countries) > 5) {
     warning("Plotting only the first 5 countires.")
@@ -62,8 +72,8 @@ plot_many_country_years <- function(imprinting_df) {
   max_obs_year <- max(years)
   min_obs_year <- min(years)
   axis_ticks <- seq(1920, max_obs_year, by = 10)
-  replace_these <- which(axis_ticks %in% c(1960, 1970, 1980))
-  axis_ticks[replace_these] <- c(1957, 1968, 1977) ## Replace 3 axis ticks with pandemic years
+  # replace_these <- which(axis_ticks %in% c(1960, 1970, 1980))
+  # axis_ticks[replace_these] <- c(1957, 1968, 1977) ## Replace 3 axis ticks with pandemic years
   axis_tick_labs <- sapply(axis_ticks, function(yr) {
     sprintf("%i\n%i", yr, max_obs_year - yr)
   }) # Label each tick with the birth year/current age of that cohort
@@ -99,8 +109,8 @@ plot_many_country_years <- function(imprinting_df) {
     geom_vline(aes(xintercept = pandemic_1968, lty = as.factor(year)), show.legend = F) +
     geom_line(aes(x = age_at_observation, y = imprinting_prob, lty = as.factor(year)), color = "firebrick2") +
     xlab("Age at time of observation") +
-    ylab("H3N2\nimprinting fraction") +
-    geom_text(aes(x = min_obs_year - 1968 - 2, y = 0.15, label = "1968 birth yr"), angle = 90, size = 3) +
+    ylab("H3N2\nImprinting fraction") +
+    geom_label(aes(x = min_obs_year - 1968, y = 0.1, label = "born 1968"), angle = 90, size = 10 / .pt, hjust = .5) +
     scale_linetype(name = "Year of observation\n  \n \n \n ") +
     ggtitle("Aging of imprinted birth cohorts") +
     facet_grid(country ~ .) +

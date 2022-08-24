@@ -8,8 +8,8 @@
 <meta name="description" content="imprinting">
 <title>intro-to-imprinting • imprinting</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="intro-to-imprinting">
 <meta property="og:description" content="imprinting">
@@ -73,12 +73,16 @@
 <div class="section level2">
 <h2 id="install-the-imprinting-package">1. Install the imprinting package<a class="anchor" aria-label="anchor" href="#install-the-imprinting-package"></a>
 </h2>
-<p>The <code>imprinting</code> package isn’t yet available on <a href="https://cran.r-project.org/" class="external-link">CRAN</a>, so it can’t yet be installed using the normal <code>install.packages("imprinting")</code> command in R. (But this feature is coming soon!)</p>
-<p>For now, we have to install the package from github using the following steps.</p>
+<p>The <code>imprinting</code> package isn’t yet available on <a href="https://cran.r-project.org/" class="external-link">CRAN</a>, so it can’t yet be
+installed using the normal <code>install.packages("imprinting")</code>
+command in R. (But this feature is coming soon!)</p>
+<p>For now, we have to install the package from github using the
+following steps.</p>
 <div class="section level4">
 <h4 id="install-the-devtools-package">1.1 Install the devtools package<a class="anchor" aria-label="anchor" href="#install-the-devtools-package"></a>
 </h4>
-<p>If prompted: you do not need to researt R prior to lading, and you do not need to install from souce.</p>
+<p>If prompted: you do not need to researt R prior to lading, and you do
+not need to install from souce.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span>, repos<span class="op">=</span><span class="st">'http://cran.us.r-project.org'</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -88,7 +92,9 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span> <span class="co"># Load the package</span></span>
 <span><span class="co">#&gt; Loading required package: usethis</span></span></code></pre></div>
-<p>Now that we have devtools installed, we can use the <code><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github()</a></code> function to install the imprinting package.</p>
+<p>Now that we have devtools installed, we can use the
+<code><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github()</a></code> function to install the imprinting
+package.</p>
 </div>
 <div class="section level4">
 <h4 id="install-the-imprinting-package-from-github">1.3 Install the imprinting package from github<a class="anchor" aria-label="anchor" href="#install-the-imprinting-package-from-github"></a>
@@ -102,17 +108,24 @@
 </h4>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cobeylab.github.io/imprinting/">imprinting</a></span><span class="op">)</span> </span></code></pre></div>
-<p>Now the package should be installed and loaded into your R workspace.</p>
+<p>Now the package should be installed and loaded into your R
+workspace.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="use-the-package-to-calculate-imprinting-probabilities">2. Use the package to calculate imprinting probabilities<a class="anchor" aria-label="anchor" href="#use-the-package-to-calculate-imprinting-probabilities"></a>
 </h2>
-<p>The main reason to use the <code>imprinting</code> package is to calculate birth year-specific probabilities of imprinting to a specific subtype of influenza A. You can read more about the biology and methods behind these calculations in <a href="https://www.science.org/doi/10.1126/science.aag1322" class="external-link">Gostic et al. 2016</a>.</p>
+<p>The main reason to use the <code>imprinting</code> package is to
+calculate birth year-specific probabilities of imprinting to a specific
+subtype of influenza A. You can read more about the biology and methods
+behind these calculations in <a href="https://www.science.org/doi/10.1126/science.aag1322" class="external-link">Gostic et
+al. 2016</a>.</p>
 <div class="section level3">
-<h3 id="calculate-imprinting-probabilities-for-one-country-and-year-of-observation">2.1 Calculate imprinting probabilities for one country and year of observation<a class="anchor" aria-label="anchor" href="#calculate-imprinting-probabilities-for-one-country-and-year-of-observation"></a>
+<h3 id="calculate-imprinting-probabilities-for-one-country-and-year-of-observation">2.1 Calculate imprinting probabilities for one country and year of
+observation<a class="anchor" aria-label="anchor" href="#calculate-imprinting-probabilities-for-one-country-and-year-of-observation"></a>
 </h3>
-<p>Use the function <code><a href="../reference/get_imprinting_probabilities.html">get_imprinting_probabilities()</a></code>. Run <code><a href="../reference/get_imprinting_probabilities.html">?get_imprinting_probabilities</a></code> for help.</p>
+<p>Use the function <code><a href="../reference/get_imprinting_probabilities.html">get_imprinting_probabilities()</a></code>. Run
+<code><a href="../reference/get_imprinting_probabilities.html">?get_imprinting_probabilities</a></code> for help.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_imprinting_probabilities.html">get_imprinting_probabilities</a></span><span class="op">(</span>observation_years <span class="op">=</span> <span class="fl">2022</span>, countries <span class="op">=</span> <span class="st">"United States"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 420 × 5</span></span></span>
@@ -128,10 +141,16 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> H1N1     <span style="text-decoration: underline;">2</span>022 United States       <span style="text-decoration: underline;">2</span>015       0.169    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> H1N1     <span style="text-decoration: underline;">2</span>022 United States       <span style="text-decoration: underline;">2</span>014       0.308    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> H1N1     <span style="text-decoration: underline;">2</span>022 United States       <span style="text-decoration: underline;">2</span>013       0.321    </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 410 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
-<p>The function returns a tibble wtih five columns: <code>subtype</code>, <code>year</code>, <code>country</code>, <code>birth_year</code>, and <code>imprinting_prob</code>. The column <code>imprinting_prob</code> gives the probability that someone born in <code>birth_year</code> and observed in <code>year</code> has imprinted to <code>subtype</code>.</p>
-<p>We can run the same command use the <code>df_format='wide'</code> option to output the same results in wide format. This displays all imprinting probabilities for the cohort side-by-side</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 410 more rows</span></span></span></code></pre></div>
+<p>The function returns a tibble wtih five columns:
+<code>subtype</code>, <code>year</code>, <code>country</code>,
+<code>birth_year</code>, and <code>imprinting_prob</code>. The column
+<code>imprinting_prob</code> gives the probability that someone born in
+<code>birth_year</code> and observed in <code>year</code> has imprinted
+to <code>subtype</code>.</p>
+<p>We can run the same command use the <code>df_format='wide'</code>
+option to output the same results in wide format. This displays all
+imprinting probabilities for the cohort side-by-side</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_imprinting_probabilities.html">get_imprinting_probabilities</a></span><span class="op">(</span>observation_years <span class="op">=</span> <span class="fl">2022</span>, </span>
 <span>                             countries <span class="op">=</span> <span class="st">"United States"</span>, </span>
@@ -149,21 +168,39 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">2</span>022 United States       <span style="text-decoration: underline;">2</span>015 0.169         0 0.518  0.313 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">2</span>022 United States       <span style="text-decoration: underline;">2</span>014 0.308         0 0.548  0.143 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">2</span>022 United States       <span style="text-decoration: underline;">2</span>013 0.321         0 0.612  0.067<span style="text-decoration: underline;">4</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 95 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 95 more rows</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="why-do-we-specify-the-observation_year">2.2 Why do we specify the <code>observation_year</code>?<a class="anchor" aria-label="anchor" href="#why-do-we-specify-the-observation_year"></a>
 </h3>
-<p>The <code>observation_year</code> affects imprinting probabilities in birth cohorts who are young enough to still be in the process of imprinting. Our model assumes that everyone has been infected by influenza before age 12, so in cohorts &lt;12 years of age at the time of observation, imprinting probabilities depend on the observation year.</p>
+<p>The <code>observation_year</code> affects imprinting probabilities in
+birth cohorts who are young enough to still be in the process of
+imprinting. Our model assumes that everyone has been infected by
+influenza before age 12, so in cohorts &lt;12 years of age at the time
+of observation, imprinting probabilities depend on the observation
+year.</p>
 <p>E.g. consider the cohort born in 2000:</p>
 <ul>
-<li>If the observation year is 2005, then this birth cohort is five years old, and still young enough to remain naive to influenza. The outputs below show that 22.9% of the cohort has not yet imprinted to any subtype.</li>
-<li>If we calculate imprinting probabilities for the same birth cohort observed in 2011 (at age 11), the model shows that most of the cohort has imprinted, but there is still a very small non-zero probability of remaining naive.</li>
-<li>When the cohort reaches age 12, (observation year 2012) the model enforces the assumption that everyone in the cohort has imprinted. It normalizes the probabilities of subtype-specific imprinting so that the H1N1, H2N2, and H3N2-specific probabilities sum to 1, and it sets the naive probability to zero.</li>
-<li>Once the cohort reaches age 12, imprinting probabilities are fixed. The outputs below show that imprinting probabilities for the 2000 cohort are identical if observed at age 12 (in 2012), or at age 22 (in 2022).</li>
+<li>If the observation year is 2005, then this birth cohort is five
+years old, and still young enough to remain naive to influenza. The
+outputs below show that 22.9% of the cohort has not yet imprinted to any
+subtype.</li>
+<li>If we calculate imprinting probabilities for the same birth cohort
+observed in 2011 (at age 11), the model shows that most of the cohort
+has imprinted, but there is still a very small non-zero probability of
+remaining naive.</li>
+<li>When the cohort reaches age 12, (observation year 2012) the model
+enforces the assumption that everyone in the cohort has imprinted. It
+normalizes the probabilities of subtype-specific imprinting so that the
+H1N1, H2N2, and H3N2-specific probabilities sum to 1, and it sets the
+naive probability to zero.</li>
+<li>Once the cohort reaches age 12, imprinting probabilities are fixed.
+The outputs below show that imprinting probabilities for the 2000 cohort
+are identical if observed at age 12 (in 2012), or at age 22 (in
+2022).</li>
 </ul>
-<p>Note: we added the age_at_observation column to the outputs below for clarity.</p>
+<p>Note: we added the age_at_observation column to the outputs below for
+clarity.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_imprinting_probabilities.html">get_imprinting_probabilities</a></span><span class="op">(</span>observation_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2005</span>, <span class="fl">2011</span>, <span class="fl">2012</span>, <span class="fl">2022</span><span class="op">)</span>, </span>
 <span>                             countries <span class="op">=</span> <span class="st">"United States"</span>, </span>
@@ -182,7 +219,9 @@
 <div class="section level3">
 <h3 id="view-a-list-of-the-available-countries">2.2 View a list of the available countries<a class="anchor" aria-label="anchor" href="#view-a-list-of-the-available-countries"></a>
 </h3>
-<p>We can only calculate imprinting probabilities for countries with data in <a href="https://www.who.int/tools/flunet" class="external-link">WHO Flu Net</a>. The input name and spelling must match the outputs below:</p>
+<p>We can only calculate imprinting probabilities for countries with
+data in <a href="https://www.who.int/tools/flunet" class="external-link">WHO Flu Net</a>. The
+input name and spelling must match the outputs below:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/show_available_countries.html">show_available_countries</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
@@ -366,7 +405,8 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">175</span> Zimbabwe</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="generate-probabilities-for-many-countries-and-observation-years">2.3 Generate probabilities for many countries and observation years<a class="anchor" aria-label="anchor" href="#generate-probabilities-for-many-countries-and-observation-years"></a>
+<h3 id="generate-probabilities-for-many-countries-and-observation-years">2.3 Generate probabilities for many countries and observation
+years<a class="anchor" aria-label="anchor" href="#generate-probabilities-for-many-countries-and-observation-years"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">many_probabilities</span> <span class="op">=</span> <span class="fu"><a href="../reference/get_imprinting_probabilities.html">get_imprinting_probabilities</a></span><span class="op">(</span>observation_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2000</span>, <span class="fl">2019</span>, <span class="fl">2022</span><span class="op">)</span>,</span>
@@ -386,9 +426,9 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> H1N1     <span style="text-decoration: underline;">2</span>000 Brazil        <span style="text-decoration: underline;">2</span>015               0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> H1N1     <span style="text-decoration: underline;">2</span>000 Brazil        <span style="text-decoration: underline;">2</span>014               0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> H1N1     <span style="text-decoration: underline;">2</span>000 Brazil        <span style="text-decoration: underline;">2</span>013               0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 5,030 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
-<p>Alternatively, you can view the outputs in a separate window or save them as a .csv file on your hard drive.</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 5,030 more rows</span></span></span></code></pre></div>
+<p>Alternatively, you can view the outputs in a separate window or save
+them as a .csv file on your hard drive.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># View the outputs in a separate window.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">many_probabilities</span><span class="op">)</span> </span>
@@ -401,9 +441,11 @@
 <h2 id="plot-the-outputs">3. Plot the outputs<a class="anchor" aria-label="anchor" href="#plot-the-outputs"></a>
 </h2>
 <div class="section level3">
-<h3 id="plot-the-first-country-year-combination-in-the-output-data-frame">3.1 Plot the first country-year combination in the output data frame<a class="anchor" aria-label="anchor" href="#plot-the-first-country-year-combination-in-the-output-data-frame"></a>
+<h3 id="plot-the-first-country-year-combination-in-the-output-data-frame">3.1 Plot the first country-year combination in the output data
+frame<a class="anchor" aria-label="anchor" href="#plot-the-first-country-year-combination-in-the-output-data-frame"></a>
 </h3>
-<p><code><a href="../reference/plot_one_country_year.html">plot_one_country_year()</a></code> takes a long-formatted output data frame and plots the first country and year combination.</p>
+<p><code><a href="../reference/plot_one_country_year.html">plot_one_country_year()</a></code> takes a long-formatted output
+data frame and plots the first country and year combination.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">many_probabilities</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
@@ -421,7 +463,8 @@
 <div class="section level3">
 <h3 id="select-a-specific-country-and-year-to-plot">Select a specific country and year to plot<a class="anchor" aria-label="anchor" href="#select-a-specific-country-and-year-to-plot"></a>
 </h3>
-<p>You can use <code><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter()</a></code> to select a specific country and year for plotting.</p>
+<p>You can use <code><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter()</a></code> to select a specific country and
+year for plotting.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_one_country_year.html">plot_one_country_year</a></span><span class="op">(</span><span class="va">many_probabilities</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">country</span> <span class="op">==</span> <span class="st">'Estonia'</span>, <span class="va">year</span> <span class="op">==</span> <span class="fl">2019</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="intro-to-imprinting_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
@@ -429,10 +472,16 @@
 <div class="section level3">
 <h3 id="plot-up-to-five-countires-at-a-time">3.2 Plot up to five countires at a time<a class="anchor" aria-label="anchor" href="#plot-up-to-five-countires-at-a-time"></a>
 </h3>
-<p><code><a href="../reference/plot_many_country_years.html">plot_many_country_years()</a></code> generates a plot of the first five countries in the imprinting outputs, across an arbitrary number of years.</p>
+<p><code><a href="../reference/plot_many_country_years.html">plot_many_country_years()</a></code> generates a plot of the first
+five countries in the imprinting outputs, across an arbitrary number of
+years.</p>
 <ul>
-<li>The plots on the left show imprinting probabilities for the latest observation year</li>
-<li>The plots on the right show how H3N2 imprinting probabilities have changed as cohorts grow older from the earliest to the latest observation year in the outputs. The vertical lines and arrow show aging of the 1968 birth cohort.</li>
+<li>The plots on the left show imprinting probabilities for the latest
+observation year</li>
+<li>The plots on the right show how H3N2 imprinting probabilities have
+changed as cohorts grow older from the earliest to the latest
+observation year in the outputs. The vertical lines and arrow show aging
+of the 1968 birth cohort.</li>
 </ul>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_many_country_years.html">plot_many_country_years</a></span><span class="op">(</span><span class="va">many_probabilities</span><span class="op">)</span></span></code></pre></div>
@@ -440,9 +489,14 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="explore-the-underlying-data-and-components-of-the-imprinting-probabilities">4. Explore the underlying data and components of the imprinting probabilities<a class="anchor" aria-label="anchor" href="#explore-the-underlying-data-and-components-of-the-imprinting-probabilities"></a>
+<h2 id="explore-the-underlying-data-and-components-of-the-imprinting-probabilities">4. Explore the underlying data and components of the imprinting
+probabilities<a class="anchor" aria-label="anchor" href="#explore-the-underlying-data-and-components-of-the-imprinting-probabilities"></a>
 </h2>
-<p>Get the fraction of influenza circulation caused by each subtype in each epidemic year from 1918-2022 in the United States using <code>get_country_cocirculation</code>. Run <code><a href="../reference/get_country_cocirculation_data.html">?get_country_cocirculation_data</a></code> for notes on data sources.</p>
+<p>Get the fraction of influenza circulation caused by each subtype in
+each epidemic year from 1918-2022 in the United States using
+<code>get_country_cocirculation</code>. Run
+<code><a href="../reference/get_country_cocirculation_data.html">?get_country_cocirculation_data</a></code> for notes on data
+sources.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_country_cocirculation_data.html">get_country_cocirculation_data</a></span><span class="op">(</span><span class="st">'United States'</span>, <span class="fl">2022</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 108 × 9</span></span></span>
@@ -458,13 +512,15 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">1</span>925        1        0        0     1 <span style="color: #BB0000;">NA</span>         1      0 Historical_assump…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">1</span>926        1        0        0     1 <span style="color: #BB0000;">NA</span>         1      0 Historical_assump…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">1</span>927        1        0        0     1 <span style="color: #BB0000;">NA</span>         1      0 Historical_assump…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 98 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
-<p>Get the circulation intensity of influenza A in each epidemic year using <code><a href="../reference/get_country_intensity_data.html">get_country_intensity_data()</a></code>.</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 98 more rows</span></span></span></code></pre></div>
+<p>Get the circulation intensity of influenza A in each epidemic year
+using <code><a href="../reference/get_country_intensity_data.html">get_country_intensity_data()</a></code>.</p>
 <ul>
-<li>Intensity of 1 is average. Higher values indicate more influenza A circulation, lower values indicate less circulation.</li>
+<li>Intensity of 1 is average. Higher values indicate more influenza A
+circulation, lower values indicate less circulation.</li>
 </ul>
-<p>See <code><a href="../reference/get_country_intensity_data.html">?get_country_intensity_data</a></code> for details on underlying data.</p>
+<p>See <code><a href="../reference/get_country_intensity_data.html">?get_country_intensity_data</a></code> for details on
+underlying data.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_country_intensity_data.html">get_country_intensity_data</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">'China'</span>, max_year <span class="op">=</span> <span class="fl">2022</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 113 × 2</span></span></span>
@@ -480,10 +536,10 @@
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">1</span>918      2.5 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">1</span>919      2.5 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">1</span>920      1.87</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with 103 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 103 more rows</span></span></span></code></pre></div>
 <div class="section level3">
-<h3 id="get-the-probability-that-an-individual-imprinted-0-1-2-12-years-after-birth">Get the probability that an individual imprinted 0, 1, 2, … 12 years after birth<a class="anchor" aria-label="anchor" href="#get-the-probability-that-an-individual-imprinted-0-1-2-12-years-after-birth"></a>
+<h3 id="get-the-probability-that-an-individual-imprinted-0-1-2-12-years-after-birth">Get the probability that an individual imprinted 0, 1, 2, … 12 years
+after birth<a class="anchor" aria-label="anchor" href="#get-the-probability-that-an-individual-imprinted-0-1-2-12-years-after-birth"></a>
 </h3>
 <p>Use the function <code><a href="../reference/get_p_infection_year.html">get_p_infection_year()</a></code></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">

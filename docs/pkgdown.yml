@@ -1,9 +1,9 @@
-pandoc: '2.16'
+pandoc: '2.18'
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   intro-to-imprinting: intro-to-imprinting.html
-last_built: 2022-08-03T20:37Z
+last_built: 2022-08-04T21:35Z
 urls:
   reference: https://cobeylab.github.io/imprinting/reference
   article: https://cobeylab.github.io/imprinting/articles

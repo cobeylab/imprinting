@@ -299,15 +299,21 @@ get_country_cocirculation_data <- function(country,
                                            output_format = "tibble") {
   check_max_year(max_year)
   template <- get_template_data()
+  stopifnot(is.character(country))
+  if (length(country) > 1) {
+    country <- country[1]
+    warning(sprintf("country must be a vector of length 1. outputting results for the first country: %s", country))
+  }
 
-  if (max_year >= 1996) {
+  if (max_year > 1996) {
     ## Get country data, and only keep years in which there are enough samples to meet the threshold
     country_data <- get_country_inputs_1997_to_present(country, max_year) %>%
       dplyr::filter(n_A >= min_samples) %>%
       mutate(data_from = paste0("country: ", country))
     ## Get regional data for years that don't meet the threshold
     region_data <- get_regional_inputs_1997_to_present(get_WHO_region(country), max_year) %>%
-      dplyr::filter(!(Year %in% country_data$Year))
+      dplyr::filter(!(Year %in% country_data$Year)) %>%
+      mutate(data_from = paste0("region: ", get_WHO_region(country)))
 
     ## Calculate the proportions of each subtype from counts,
     ## And reformat to match the template columns
@@ -379,6 +385,11 @@ get_country_intensity_data <- function(country,
   check_max_year(max_year)
   pre_1997_intensity <- INTENSITY_DATA %>% dplyr::filter(year <= 1997)
   ## Get country data, and only keep years in which there are enough samples to meet the threshold
+  stopifnot(is.character(country))
+  if (length(country) > 1) {
+    country <- country[1]
+    warning(sprintf("country must be a vector of length 1. outputting results for the first country: %s", country))
+  }
 
   if (max_year > 1996) {
     country_data <- get_country_inputs_1997_to_present(country, max_year) %>%
@@ -388,7 +399,10 @@ get_country_intensity_data <- function(country,
       mutate(data_from = paste0("country: ", country)) %>%
       mutate(
         raw_intensity = n_A / n_processed,
-        intensity = ifelse(quality_check == FALSE, 1, raw_intensity / mean(raw_intensity[quality_check == TRUE])), ## Define intensity relative to the mean
+        mean_intensity = mean(raw_intensity[quality_check == TRUE]),
+        intensity = ifelse(quality_check == FALSE, 1,
+          ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+        ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
 
@@ -401,7 +415,10 @@ get_country_intensity_data <- function(country,
       ) %>%
       mutate(
         raw_intensity = n_A / n_processed,
-        intensity = ifelse(quality_check == FALSE, 1, raw_intensity / mean(raw_intensity[quality_check == TRUE])), ## Define intensity relative to the mean
+        mean_intensity = mean(raw_intensity[quality_check == TRUE]),
+        intensity = ifelse(quality_check == FALSE, 1,
+          ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+        ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
 
