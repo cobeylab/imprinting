@@ -10,7 +10,9 @@ output: github_document
 
 # Overview
 
-imprinting is an R package to reconstruct birth year-specific probabilities of imprinting to each subtype of influenza A, H1N1, H2N2, H3N2. We may add the ability to reconstruct imprinting to influenza B in the future. Reconstructions are done following the methods of [(Gostic et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322).
+imprinting is an R package to reconstruct birth year-specific probabilities of imprinting to influenza A. Reconstructions are done following the methods of [(Gostic et al. 2016)](https://www.science.org/doi/10.1126/science.aag1322).
+
+By default the package calculates subtype-specific probabilities of imprinting to H1N1, H2N2, and H3N2, but it is possible to calculate other kinds of imprinting probabilities (e.g. clade-level, strain-level, vaccination) using user-provided circulation frequencies. We may consider including influenza B-specific probabilities in future updates if there is demand. Please submit an [issue](https://github.com/cobeylab/imprinting/issues) to let us know if you need influenza B-specific functionality.
 
 * `get_imprinting_probabilities()` returns a data frame containing birth year-specific probabilities of imprinting to H1N1, H2N2, or H3N2 for an individual in each input country and year of observation.
 * `show_available_countries()` lists the available countries (those with data in [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12)), with valid spellings.
