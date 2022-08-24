@@ -12,7 +12,11 @@ knitr::opts_chunk$set(
 collapse = TRUE,
 comment = "#>"
 )
+library(dplyr)
 ```
+
+
+
   
   
 # Generate probabilities of imprinting to custom subsets of influenza A viruses
@@ -31,7 +35,10 @@ As an example, let's imagine we want to calculate subtype-specific imprinting pr
 
 Let's start by making a data frame of circulation frequencies for the United States.
 
+
+
 ```{r}
+library(imprinting)
 ## Start with subtype-specific fractions for H1N1, H2N2, H3N2
 US_frequencies = get_country_cocirculation_data(country = 'United States', max_year = 2022) %>%
   select(1:4)
