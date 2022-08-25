@@ -3,6 +3,9 @@ COUNTRY_NAMES <- readRDS(system.file("extdata", "COUNTRY_NAMES.rds", package = "
 THOMPSON_DATA <- readRDS(system.file("extdata", "THOMPSON_DATA.rds", package = "imprinting"))
 INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package = "imprinting"))
 
+# Ensure that filter() is the dplyr version
+filter <- dplyr::filter 
+
 parse_region_names <- function(region) {
   ## Convert two-word region names for file import
   if (tolower(region) == "eastern mediterranean") {
