@@ -230,7 +230,7 @@ get_probs_one_birth_year <- function(this_birth_year,
   # Else, don't normalize and extract the probability of remaiing naive below.
   # Combine primary infection probabilities with data on what strains circulated each year
   freq_mat <- these_annual_frequencies %>%
-    filter(year %in% valid_infection_years) %>% # pull out relevant years of primary infection
+    dplyr::filter(year %in% valid_infection_years) %>% # pull out relevant years of primary infection
     select(-1) %>%
     as.matrix()
   imprinting_probs <- colSums(freq_mat * inf.probs) # Get type-specific probabilities
