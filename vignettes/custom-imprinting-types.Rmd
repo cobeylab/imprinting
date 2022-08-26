@@ -1,8 +1,8 @@
 ---
-title: "custom-exposure-types"
+title: "custom-imprinting-types"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{custom-exposure-types}
+  %\VignetteIndexEntry{custom-imprinting-types}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---

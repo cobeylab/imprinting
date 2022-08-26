@@ -3,6 +3,9 @@ COUNTRY_NAMES <- readRDS(system.file("extdata", "COUNTRY_NAMES.rds", package = "
 THOMPSON_DATA <- readRDS(system.file("extdata", "THOMPSON_DATA.rds", package = "imprinting"))
 INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package = "imprinting"))
 
+# Ensure that filter() is the dplyr version
+filter <- dplyr::filter
+
 parse_region_names <- function(region) {
   ## Convert two-word region names for file import
   if (tolower(region) == "eastern mediterranean") {
@@ -177,7 +180,8 @@ get_template_data <- function() {
       group2 = `A/H3N2`,
       A = `A/H1N1` + `A/H2N2` + `A/H3N2`
     ) %>%
-    select(year, starts_with("A"), starts_with("B"), starts_with("group"), data_from)
+    select(year, starts_with("A"), starts_with("B"), starts_with("group"), data_from) %>%
+    dplyr::filter(year < 1997)
   ## Test
   test_rowsums_group(template$group1, template$group2)
   test_rowsums_subtype(template$`A/H1N1`, template$`A/H2N2`, template$`A/H3N2`)
@@ -252,7 +256,7 @@ get_country_inputs_1997_to_present <- function(country,
     stop(sprintf('No files found for region: "%s" \nValid regions are: %s\nSee https://en.wikipedia.org/wiki/List_of_WHO_regions for a list of WHO regions.\nNew data files can be obtained at WHO FluMart - https://apps.who.int/flumart/Default?ReportNo=12', who_region, paste(valid_regions, sep = ", ")))
   }
   if (max_year <= 1996) {
-    warning("Country-specific data are not available prior to 1996. Returning a NULL result.")
+    warning("Country-specific data are not available prior to 1997. Returning a NULL result.")
     return(NULL)
   }
   country_data <- readRDS(system.file("extdata", "country_data.rds", package = "imprinting"))
