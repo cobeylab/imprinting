@@ -4,12 +4,19 @@
 \alias{get_imprinting_probabilities}
 \title{Calculate imprinting probabilities}
 \usage{
-get_imprinting_probabilities(observation_years, countries, df_format = "long")
+get_imprinting_probabilities(
+  observation_years,
+  countries,
+  annual_frequencies = NULL,
+  df_format = "long"
+)
 }
 \arguments{
 \item{observation_years}{year(s) of observation in which to output imprinting probabilities. The observation year, together with the birth year, determines the birth cohort's age when calculating imprinting probabilities. Cohorts <=12 years old at the time of observation have some probability of being naive to influenza.}
 
 \item{countries}{a vector of countries for which to calculate imprinting probabilities. Run \code{show_available_countries()} for a list of valid inputs, and proper spellings.}
+
+\item{annual_frequencies}{an optional input allowing users to specify custom circulation frequencies for arbitrary types of imprinting in order to study, e.g. imprinting to specific strains, clades, or imprinting by vaccination. If nothing is input, the default is to calculate subtype-specific probabilities (possible imprinting types are A/H1N1, A/H2N2, A/H3N2, or naive). See \link{details}.}
 
 \item{df_format}{must be either 'long' (default) or 'wide'. Controls whether the output data frame is in long format (with a single column for calculated probabilities and a second column for imprinting subtype), or wide format (with four columns, H1N1, H2N2, H3N2, and naive) showing the probability of each imprinting status.}
 }
@@ -27,4 +34,25 @@ For each country and year of observation, calculate the probability that cohorts
 Imprinting probabilities are calculated following \href{https://www.science.org/doi/10.1126/science.aag1322}{Gostic et al. 2016}. Briefly, the model first calculates the probability that an individual's first influenza infection occurs 0, 1, 2, ... 12 years after birth using a modified geometric waiting time model. The annual circulation intensities output by \code{\link[=get_country_intensity_data]{get_country_intensity_data()}} scale the probability of primary infection in each calendar year.
 
 Then, after calculating the probability of imprinting 0, 1, 2, ... calendar years after birth, the model uses data on which subtypes circulated in each calendar year (from \code{\link[=get_country_cocirculation_data]{get_country_cocirculation_data()}}) to estimate that probability that a first infection was caused by each subtype. See \code{\link[=get_country_cocirculation_data]{get_country_cocirculation_data()}} for details about the underlying data sources.
+
+To calculate other kinds of imprinting probabilities (e.g. for specific clades, strains, or to include pediatric vaccination), users can specify custom circulation frequencies as a list, \link{annual_frequencies}. This list must contain one named element for each country in the \link{countries} input vector. Each list element must be a data frame or tibble whose first column is named "year" and contains numeric years from 1918:max(\link{observation_years}). Columns 2:N of the data frame must contain circulation frequencies that sum to 1 across each row, and each column must have a unique name indicating the exposure kind. E.g. column names could be {"year", "H1N1", "H2N2", "H3N2", "vaccinated"} to include probabilities of imprinting by vaccine, or {"year", "3C.3A", "not_3C.3A"} to calculate clade-specific probabilities.  Do not include a naive column. Any number of imprinting types is allowed, but the code is not optimized to run efficiently when the number of categories is very large. Frequencies within the column must be supplied by the user. See \href{https://www.nature.com/articles/s41467-021-24566-y}{Vieira et al. 2021} for methods to estimate circulation frequencies from sequence databases like \href{https://gisaid.org/}{GISAID} or the \href{https://www.ncbi.nlm.nih.gov/genomes/FLU/Database/nph-select.cgi?go=database}{NCBI Sequence Database}.
+}
+\examples{
+# Get imprinting probabilities for one country and year
+get_imprinting_probabilities(2022, "United States")
+
+# Return the same outputs in wide format
+get_imprinting_probabilities(2022, "United States", df_format = "wide")
+
+# The observation year affects probabilities in cohorts young enough to remain naive (<12yo)
+get_imprinting_probabilities(
+  observation_years = c(2005, 2011, 2012, 2022),
+  countries = "United States",
+  df_format = "wide"
+) \%>\%
+  dplyr::filter(birth_year == 2000) \%>\%
+  mutate(age_at_observation = year - birth_year)
+
+# Return many countries and observation years simultaneously
+get_imprinting_probabilities(c(2000, 2003:2005, 2020), c("United States", "Mexico", "Guatemala", "Belize", "Honduras"))
 }
