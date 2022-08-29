@@ -427,21 +427,22 @@ get_country_intensity_data <- function(country,
         ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
-    
+
     # Check for missing years
     # Which can occur if regional data also fails quality checks
-    missing_years = (1997:max_year)[!(1997:max_year %in% c(country_data$Year, region_data$Year))]
-    global_data = NULL
-    
+    missing_years <- (1997:max_year)[!(1997:max_year %in% c(country_data$Year, region_data$Year))]
+    global_data <- NULL
+
     # Substitute global data if need be
-    if(length(missing_years>0)){
-      global_data = lapply(show_available_regions()$region, function(rr){
+    if (length(missing_years > 0)) {
+      global_data <- lapply(show_available_regions()$region, function(rr) {
         get_regional_inputs_1997_to_present(rr, max_year) %>%
-          dplyr::filter(Year %in% missing_years)}) %>%
+          dplyr::filter(Year %in% missing_years)
+      }) %>%
         bind_rows() %>%
         ## Get totals globally (for all regions)
         group_by(Year) %>%
-        summarise(across(tidyselect::contains("_"), .fns = ~sum(.x, na.rm = T))) %>%
+        summarise(across(tidyselect::contains("_"), .fns = ~ sum(.x, na.rm = T))) %>%
         ## Quality checks
         mutate(
           data_from = paste0("global"),
@@ -451,7 +452,7 @@ get_country_intensity_data <- function(country,
           raw_intensity = n_A / n_processed,
           mean_intensity = mean(raw_intensity[quality_check == TRUE]),
           intensity = ifelse(quality_check == FALSE, 1,
-                             ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+            ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
           ), ## Define intensity relative to the mean
           intensity = pmin(intensity, 2.5)
         )
@@ -459,11 +460,13 @@ get_country_intensity_data <- function(country,
       ## Quality checks: all global data pass quality control
       stopifnot(all(global_data$quality_check))
     }
-    
+
     ## Quality checks: all years are accounted for
-    stopifnot(all(1997:max_year %in% c(country_data$Year, 
-                                       region_data$Year,
-                                       global_data$Year)) )
+    stopifnot(all(1997:max_year %in% c(
+      country_data$Year,
+      region_data$Year,
+      global_data$Year
+    )))
 
 
     ## Calculate the proportions of each subtype from counts,
