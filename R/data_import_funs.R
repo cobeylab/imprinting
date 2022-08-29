@@ -75,7 +75,8 @@ show_available_countries <- function() {
 show_available_regions <- function() {
   COUNTRY_NAMES %>%
     select(region) %>%
-    distinct()
+    distinct() %>%
+    mutate(region = sapply(region, parse_region_names))
 }
 
 
