@@ -91,6 +91,12 @@ Children are more likely to imprint in years with high levels of influenza A cir
 
 * For **1997-present**, we calculate country or region-specific intensities using surveillance data from WHO Flu Mart. Intensity is calculated as: [fraction of processed samples positive for flu A]/[mean fraction of processed samples positive for flu A]. Country-specific data are used by default. Regional data are substituted when there are an insufficient number of country-specific specimens.
 
+# Funding
+
+Development of this R package was supported by the [NIH Centers of Excellence in Influenza Research and Response](https://www.ceirr-network.org/) (CEIRR) Network of the National Institutes of Health under contract number 75N93021C00015. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health.
+
+
+
 # Bugs
 
 To report bugs, please file an issue with a reproducible example at [github.com/cobeylab/imprinting](https://github.com/cobeylab/imprinting).
