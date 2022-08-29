@@ -413,7 +413,8 @@ get_country_intensity_data <- function(country,
 
     ## Get regional data for years that don't meet the quality check and sample size requirements
     region_data <- get_regional_inputs_1997_to_present(get_WHO_region(country), max_year) %>%
-      dplyr::filter(!(Year %in% country_data$Year)) %>%
+      dplyr::filter(!(Year %in% country_data$Year)) %>% ## Exclude years in the country-specific data
+      dplyr::filter(n_processed >= min_specimens) %>% ## Exclude country-years that don't meet the minimum sample size
       mutate(
         data_from = paste0("region: ", get_WHO_region(country)),
         quality_check = n_processed >= (n_A + n_B)
@@ -426,12 +427,51 @@ get_country_intensity_data <- function(country,
         ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
+    
+    # Check for missing years
+    # Which can occur if regional data also fails quality checks
+    missing_years = (1997:max_year)[!(1997:max_year %in% c(country_data$Year, region_data$Year))]
+    global_data = NULL
+    
+    # Substitute global data if need be
+    if(length(missing_years>0)){
+      global_data = lapply(show_available_regions()$region, function(rr){
+        get_regional_inputs_1997_to_present(rr, max_year) %>%
+          dplyr::filter(Year %in% missing_years)}) %>%
+        bind_rows() %>%
+        ## Get totals globally (for all regions)
+        group_by(Year) %>%
+        summarise(across(tidyselect::contains("_"), .fns = ~sum(.x, na.rm = T))) %>%
+        ## Quality checks
+        mutate(
+          data_from = paste0("global"),
+          quality_check = n_processed >= (n_A + n_B)
+        ) %>%
+        mutate(
+          raw_intensity = n_A / n_processed,
+          mean_intensity = mean(raw_intensity[quality_check == TRUE]),
+          intensity = ifelse(quality_check == FALSE, 1,
+                             ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+          ), ## Define intensity relative to the mean
+          intensity = pmin(intensity, 2.5)
+        )
+
+      ## Quality checks: all global data pass quality control
+      stopifnot(all(global_data$quality_check))
+    }
+    
+    ## Quality checks: all years are accounted for
+    stopifnot(all(1997:max_year %in% c(country_data$Year, 
+                                       region_data$Year,
+                                       global_data$Year)) )
+
 
     ## Calculate the proportions of each subtype from counts,
     ## And reformat to match the template columns
     formatted_data <- bind_rows(
       region_data,
-      country_data
+      country_data,
+      global_data
     ) %>%
       rename(year = Year) %>%
       arrange(year) %>%
