@@ -387,7 +387,7 @@ get_country_cocirculation_data <- function(country,
 #' @details
 #' For 1918-1996, we use annual intensities from Gostic et al., Science, 2016. For 1997-present, we calculate country or region-specific intensities using surveillance data from [WHO Flu Mart](). Intensity is calculated as:
 #'  \[fraction of processed samples positive for flu A\]/\[mean fraction of processed samples positive for flu A\].
-#'  Country-specific data are used by default. Regional data are substituted when there are an insufficient number of country-specific specimens.
+#'  Country-specific data are used by default. Regional or global data are substituted when country-specific data contain too few observations or fail quality checks. Global data are only used in years when regional data are insufficient. 
 #'
 #' @param country country of interest. Run `show_available_countries()` for valid inputs.
 #' @param max_year last year of interest. Results will be generated from 1918:max_year.
