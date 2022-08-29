@@ -317,14 +317,26 @@ get_country_cocirculation_data <- function(country,
       mutate(data_from = paste0("country: ", country))
     ## Get regional data for years that don't meet the threshold
     region_data <- get_regional_inputs_1997_to_present(get_WHO_region(country), max_year) %>%
+      dplyr::filter(n_A >= min_samples) %>%
       dplyr::filter(!(Year %in% country_data$Year)) %>%
       mutate(data_from = paste0("region: ", get_WHO_region(country)))
+    ## Get global data for years that still don't meet the threshold
+    global_data <- lapply(show_available_regions()$region, function(rr) {
+      get_regional_inputs_1997_to_present(rr, max_year) %>%
+        dplyr::filter(!(Year %in% c(country_data$Year, region_data$Year))) 
+    }) %>%
+      bind_rows() %>%
+      ## Get totals globally (for all regions)
+      group_by(Year) %>%
+      summarise(across(tidyselect::starts_with("n_"), .fns = ~ sum(.x, na.rm = T))) %>%
+      mutate(data_from = "global")
 
     ## Calculate the proportions of each subtype from counts,
     ## And reformat to match the template columns
     formatted_data <- bind_rows(
       region_data,
-      country_data
+      country_data,
+      global_data
     ) %>%
       mutate(
         `A/H1N1` = n_H1N1 / n_A,
