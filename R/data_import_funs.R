@@ -323,7 +323,7 @@ get_country_cocirculation_data <- function(country,
     ## Get global data for years that still don't meet the threshold
     global_data <- lapply(show_available_regions()$region, function(rr) {
       get_regional_inputs_1997_to_present(rr, max_year) %>%
-        dplyr::filter(!(Year %in% c(country_data$Year, region_data$Year))) 
+        dplyr::filter(!(Year %in% c(country_data$Year, region_data$Year)))
     }) %>%
       bind_rows() %>%
       ## Get totals globally (for all regions)
