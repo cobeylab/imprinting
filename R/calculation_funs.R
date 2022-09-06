@@ -110,15 +110,15 @@ to_long_df <- function(outlist) {
 #' For cohorts >12 years old in the year of observation, the probability of remaining naive is 0, and the subtype-specific probabilities are normalized to sum to 1. For cohorts <=12 years old in the year of observation, the probability of remaining naive is non-zero. For cohorts not yet born at the time of observation, all output probabilities are 0.
 #'
 #' @examples
-#' ===========================================================
+#' #===========================================================
 #' # Get imprinting probabilities for one country and year 
 #' get_imprinting_probabilities(2022, "United States")
-#' ===========================================================
+#' #===========================================================
 #' # Return the same outputs in wide format
 #' get_imprinting_probabilities(2022, 
 #'                              "United States", 
 #'                              df_format = "wide")
-#' ===========================================================
+#' #===========================================================
 #' # The observation year affects probabilities in cohorts young enough to remain naive (<12yo)
 #' get_imprinting_probabilities(
 #'   observation_years = c(2005, 2011, 2012, 2022),
@@ -127,14 +127,14 @@ to_long_df <- function(outlist) {
 #' ) %>%
 #'   dplyr::filter(birth_year == 2000) %>%
 #'   mutate(age_at_observation = year - birth_year)
-#' ===========================================================
+#' #===========================================================
 #' # Return many countries and observation years simultaneously
 #' get_imprinting_probabilities(c(2000, 2003:2005, 2020), c("United States", "Mexico", "Guatemala", "Belize", "Honduras"))
-#' ===========================================================
+#' #===========================================================
 #' # Calculate custom imprinting probabilities to two imaginary strains of influenza A,
-#' the purple strain and the gold strain. Here, `made_up_frequencies` 
-#' satisfies all technical requirements of 'annual_frequencies'.
-#' 
+#' # the purple strain and the gold strain. Here, `made_up_frequencies`
+#' # satisfies all technical requirements of 'annual_frequencies'.
+#'
 #' made_up_frequencies = list("Japan" = data_frame(year = 1918:2022,
 #'                                                 'purple' = runif(length(1918:2022)),
 #'                                                 'gold' = 1-purple))
