@@ -4,7 +4,7 @@ THOMPSON_DATA <- readRDS(system.file("extdata", "THOMPSON_DATA.rds", package = "
 INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package = "imprinting"))
 
 # Ensure that filter() is the dplyr version
-filter <- dplyr::filter
+# filter <- dplyr::filter
 
 parse_region_names <- function(region) {
   ## Convert two-word region names for file import
