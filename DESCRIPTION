@@ -2,8 +2,9 @@ Package: imprinting
 Type: Package
 Title: Imprinting Calculator
 Version: 0.1.0
-Author: Katelyn M. Gostic
-Maintainer: Katelyn M. Gostic <kgostic@uchicago.edu>
+Authors@R: c(
+person("Katelyn M.", "Gostic", "kgostic@uchicago.edu", role = c("aut", "cre"),
+person("Alex", "Byrnes", "abyrnes@uchicago.edu", role = c("cab", "cre"))
 Description: Reconstruct birth-year specific probabilities of immune imprinting to influenza A, using the methods of Gostic et al. 2016 (DOI: 10.1126/science.aag1322).
 License: MIT
 Encoding: UTF-8
@@ -24,3 +25,4 @@ RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 URL: https://cobeylab.github.io/imprinting/
+BugReports: https://github.com/cobeylab/imprinting/issues
