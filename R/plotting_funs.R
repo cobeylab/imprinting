@@ -15,6 +15,9 @@
 plot_one_country_year <- function(imprinting_df,
                                   country = NULL,
                                   year = NULL) {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  birth_year <- imprinting_prob <- subtype <- NULL
+
   if (ncol(imprinting_df) > 5) {
     stop("imprinting_df must be in long format, output from get_imprinting_probabilities()")
   }
@@ -61,6 +64,10 @@ plot_one_country_year <- function(imprinting_df,
 #' plot_many_country_years(imprinting_df)
 #' @export
 plot_many_country_years <- function(imprinting_df) {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  country <- plot_number <- year <- birth_year <- imprinting_prob <- subtype <- age_at_observation <- pandemic_1968 <- NULL
+
+
   if (ncol(imprinting_df) > 5) {
     stop("imprinting_df must be in long format, output from get_imprinting_probabilities()")
   }
@@ -93,13 +100,12 @@ plot_many_country_years <- function(imprinting_df) {
     scale_x_continuous(breaks = axis_ticks, labels = axis_tick_labs) +
     ggtitle(sprintf("Probabilities in %i", max_obs_year)) +
     facet_grid(country ~ .) +
-    theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1)) +
+    theme(legend.position = "bottom", axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) +
     guides(fill = guide_legend(nrow = 2), color = guide_legend(nrow = 2))
   ## For each country, plot lineplots of the H1N1 imprinting probs, in the min and max years of observation
   line_plots <- imprinting_df %>%
     dplyr::filter(plot_number == 1) %>%
     dplyr::filter(year %in% c(max_obs_year, min_obs_year)) %>%
-    dplyr::filter(subtype %in% c("A/H3N2")) %>%
     mutate(
       age_at_observation = year - birth_year,
       pandemic_1968 = year - 1968

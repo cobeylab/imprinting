@@ -68,6 +68,9 @@ get_p_infection_year <- function(birth_year,
 
 
 to_long_df <- function(outlist) {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  year_country <- year <- country <- birth_year <- NULL
+  
   ## Reformat the list of matrix outputs into a long data frame
   reformat_one_list_element <- function(ll) {
     ## ll is a matrix whose columns represent birth years, and rows represent unique countries and years of observation
@@ -148,6 +151,9 @@ get_imprinting_probabilities <- function(observation_years,
                                          countries,
                                          annual_frequencies = NULL,
                                          df_format = "long") {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  country <- year <- birth_year <- subtype <- NULL
+
   ## Input checks
   current_year <- as.numeric(format(Sys.Date(), "%Y"))
   if (!all(observation_years >= 1918 & observation_years <= current_year)) {
@@ -238,7 +244,7 @@ get_imprinting_probabilities <- function(observation_years,
         names_to = "subtype",
         values_to = "imprinting_prob"
       ) %>%
-      arrange(subtype, desc(birth_year)))
+      arrange(subtype, dplyr::desc(birth_year)))
   }
 }
 
@@ -248,6 +254,8 @@ get_probs_one_birth_year <- function(this_birth_year,
                                      max_year,
                                      this_intensity_data,
                                      these_annual_frequencies) {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+ year <- NULL
   ## Loop across birth years
   # get possible years of first infection for this birth year
   # first infections can occur up to age 12, or up until the current year, whichever comes first
