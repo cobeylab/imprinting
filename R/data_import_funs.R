@@ -328,7 +328,7 @@ get_country_cocirculation_data <- function(country,
       bind_rows() %>%
       ## Get totals globally (for all regions)
       group_by(Year) %>%
-      summarise(across(tidyselect::starts_with("n_"), .fns = ~ sum(.x, na.rm = T))) %>%
+      dplyr::summarise(across(tidyselect::starts_with("n_"), .fns = ~ sum(.x, na.rm = T))) %>%
       mutate(data_from = "global")
 
     ## Calculate the proportions of each subtype from counts,
@@ -454,7 +454,7 @@ get_country_intensity_data <- function(country,
         bind_rows() %>%
         ## Get totals globally (for all regions)
         group_by(Year) %>%
-        summarise(across(tidyselect::contains("_"), .fns = ~ sum(.x, na.rm = T))) %>%
+        dplyr::summarise(across(tidyselect::contains("_"), .fns = ~ sum(.x, na.rm = T))) %>%
         ## Quality checks
         mutate(
           data_from = paste0("global"),
