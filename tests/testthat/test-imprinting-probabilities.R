@@ -20,6 +20,7 @@ test_that("Observation year prior to 1996 returns known, valid probabilities", {
   expect_equal(probs$imprinting_prob, c(0.70, 0.91, 0.00, 0.00, 0.00, 0.00, 0.30, 0.09), tolerance = 0.01)
 })
 
+
 test_that("Known, valid imprinting probabilities are returned", {
   probs <- get_imprinting_probabilities(observation_years = 2020, countries = "Canada", df_format = "long") %>%
     dplyr::filter(subtype == "A/H1N1") %>%

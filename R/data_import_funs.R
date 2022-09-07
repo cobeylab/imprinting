@@ -75,7 +75,8 @@ show_available_countries <- function() {
 show_available_regions <- function() {
   COUNTRY_NAMES %>%
     select(region) %>%
-    distinct()
+    distinct() %>%
+    mutate(region = sapply(region, parse_region_names))
 }
 
 
@@ -281,7 +282,7 @@ get_country_inputs_1997_to_present <- function(country,
 #'
 #' * Historical assumptions: From 1918-1956, we assume only H1N1 circulated. From 1957-1967, we assume only H2N2 circulated. From 1968-1976, we assume only H3N2 circulated.
 #' * [Thompson et al. JAMA, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750): From 1977-1996 we pull data on the relative dominance of H1N1 and H3N2 from Table 1 of Thompson et al. 2003, which reports surveillance data collected in the United States.
-#' * From 1997-present, we pull in country or region-specific data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12) on the fraction of specimens collected in routine influenza surveillance that test positive for each subtype. Country-specific data are the default. Regional data are if the number of country-specific specimens is insufficient. [get_template_data()] imports the data for 1918-1996. [get_country_inputs_1997_to_present()] and [get_regional_inputs_1997_to_present()] import the data for 1997 on.
+#' * From 1997-present, we pull in country or region-specific data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12) on the fraction of specimens collected in routine influenza surveillance that test positive for each subtype. Country-specific data are the default. Regional data, then global data are used if the number of country or region-specific specimens is insufficient. [get_template_data()] imports the data for 1918-1996. [get_country_inputs_1997_to_present()] and [get_regional_inputs_1997_to_present()] import the data for 1997 on.
 #'
 #' @param country country of interest. Run `show_available_countries()` for a list of valid inputs.
 #' @param max_year last year of interest. Results will be generated from 1918:max_year.
@@ -316,14 +317,26 @@ get_country_cocirculation_data <- function(country,
       mutate(data_from = paste0("country: ", country))
     ## Get regional data for years that don't meet the threshold
     region_data <- get_regional_inputs_1997_to_present(get_WHO_region(country), max_year) %>%
+      dplyr::filter(n_A >= min_samples) %>%
       dplyr::filter(!(Year %in% country_data$Year)) %>%
       mutate(data_from = paste0("region: ", get_WHO_region(country)))
+    ## Get global data for years that still don't meet the threshold
+    global_data <- lapply(show_available_regions()$region, function(rr) {
+      get_regional_inputs_1997_to_present(rr, max_year) %>%
+        dplyr::filter(!(Year %in% c(country_data$Year, region_data$Year)))
+    }) %>%
+      bind_rows() %>%
+      ## Get totals globally (for all regions)
+      group_by(Year) %>%
+      dplyr::summarise(across(tidyselect::starts_with("n_"), .fns = ~ sum(.x, na.rm = T))) %>%
+      mutate(data_from = "global")
 
     ## Calculate the proportions of each subtype from counts,
     ## And reformat to match the template columns
     formatted_data <- bind_rows(
       region_data,
-      country_data
+      country_data,
+      global_data
     ) %>%
       mutate(
         `A/H1N1` = n_H1N1 / n_A,
@@ -374,7 +387,7 @@ get_country_cocirculation_data <- function(country,
 #' @details
 #' For 1918-1996, we use annual intensities from Gostic et al., Science, 2016. For 1997-present, we calculate country or region-specific intensities using surveillance data from [WHO Flu Mart](). Intensity is calculated as:
 #'  \[fraction of processed samples positive for flu A\]/\[mean fraction of processed samples positive for flu A\].
-#'  Country-specific data are used by default. Regional data are substituted when there are an insufficient number of country-specific specimens.
+#'  Country-specific data are used by default. Regional or global data are substituted when country-specific data contain too few observations or fail quality checks. Global data are only used in years when regional data are insufficient.
 #'
 #' @param country country of interest. Run `show_available_countries()` for valid inputs.
 #' @param max_year last year of interest. Results will be generated from 1918:max_year.
@@ -412,7 +425,8 @@ get_country_intensity_data <- function(country,
 
     ## Get regional data for years that don't meet the quality check and sample size requirements
     region_data <- get_regional_inputs_1997_to_present(get_WHO_region(country), max_year) %>%
-      dplyr::filter(!(Year %in% country_data$Year)) %>%
+      dplyr::filter(!(Year %in% country_data$Year)) %>% ## Exclude years in the country-specific data
+      dplyr::filter(n_processed >= min_specimens) %>% ## Exclude country-years that don't meet the minimum sample size
       mutate(
         data_from = paste0("region: ", get_WHO_region(country)),
         quality_check = n_processed >= (n_A + n_B)
@@ -426,11 +440,53 @@ get_country_intensity_data <- function(country,
         intensity = pmin(intensity, 2.5)
       )
 
+    # Check for missing years
+    # Which can occur if regional data also fails quality checks
+    missing_years <- (1997:max_year)[!(1997:max_year %in% c(country_data$Year, region_data$Year))]
+    global_data <- NULL
+
+    # Substitute global data if need be
+    if (length(missing_years > 0)) {
+      global_data <- lapply(show_available_regions()$region, function(rr) {
+        get_regional_inputs_1997_to_present(rr, max_year) %>%
+          dplyr::filter(Year %in% missing_years)
+      }) %>%
+        bind_rows() %>%
+        ## Get totals globally (for all regions)
+        group_by(Year) %>%
+        dplyr::summarise(across(tidyselect::contains("_"), .fns = ~ sum(.x, na.rm = T))) %>%
+        ## Quality checks
+        mutate(
+          data_from = paste0("global"),
+          quality_check = n_processed >= (n_A + n_B)
+        ) %>%
+        mutate(
+          raw_intensity = n_A / n_processed,
+          mean_intensity = mean(raw_intensity[quality_check == TRUE]),
+          intensity = ifelse(quality_check == FALSE, 1,
+            ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+          ), ## Define intensity relative to the mean
+          intensity = pmin(intensity, 2.5)
+        )
+
+      ## Quality checks: all global data pass quality control
+      stopifnot(all(global_data$quality_check))
+    }
+
+    ## Quality checks: all years are accounted for
+    stopifnot(all(1997:max_year %in% c(
+      country_data$Year,
+      region_data$Year,
+      global_data$Year
+    )))
+
+
     ## Calculate the proportions of each subtype from counts,
     ## And reformat to match the template columns
     formatted_data <- bind_rows(
       region_data,
-      country_data
+      country_data,
+      global_data
     ) %>%
       rename(year = Year) %>%
       arrange(year) %>%

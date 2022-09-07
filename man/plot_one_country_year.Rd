@@ -4,7 +4,7 @@
 \alias{plot_one_country_year}
 \title{Plot imprinting probabilities for a single country and year}
 \usage{
-plot_one_country_year(imprinting_df)
+plot_one_country_year(imprinting_df, country = NULL, year = NULL)
 }
 \arguments{
 \item{imprinting_df}{A long data frame of imprinted probabilities output by \code{\link[=get_imprinting_probabilities]{get_imprinting_probabilities()}}. If the data frame contains more than one country and year, on the first will be plotted.}

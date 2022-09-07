@@ -12,6 +12,9 @@ knitr::opts_chunk$set(
 collapse = TRUE,
 comment = "#>"
 )
+library(dplyr)
+library(ggplot2)
+library(tidyr)
 ```
   
   
@@ -100,7 +103,7 @@ Note: we added the age_at_observation column to the outputs below for clarity.
 get_imprinting_probabilities(observation_years = c(2005, 2011, 2012, 2022), 
                              countries = "United States", 
                              df_format = 'wide') %>%
-  filter(birth_year == 2000) %>%
+  dplyr::filter(birth_year == 2000) %>%
   mutate(age_at_observation = year-birth_year) %>%
   select(c(1,2,3,8,4:7))
 ```
@@ -149,7 +152,8 @@ plot_one_country_year(many_probabilities)
 You can use `filter()` to select a specific country and year for plotting.
 
 ```{r fig.width = 7}
-plot_one_country_year(many_probabilities %>% filter(country == 'Estonia', year == 2019))
+plot_one_country_year(many_probabilities %>% 
+                        dplyr::filter(country == 'Estonia', year == 2019))
 ```
 
 ## 3.2 Plot up to five countires at a time
@@ -200,6 +204,5 @@ sum(probs) ## Raw probabilities are not yet normalized.
 norm_probs = probs/sum(probs) ## Normalize
 sum(norm_probs)
 ```
-
 
 
