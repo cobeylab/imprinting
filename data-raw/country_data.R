@@ -13,7 +13,7 @@ country_data <- lapply(COUNTRY_NAMES$country, function(country) {
     read_csv(this_filepath, skip = 3, show_col_types = FALSE) %>% ## Read in the file
       dplyr::filter(tolower(Country) == tolower(parse_country_names(country))) %>% ## Keep only the country of interest
       group_by(Country, Year) %>% ## Summarize the number of positive samples of each subtype observed in each year
-      summarise(
+      dplyr::summarise(
         n_H1N1 = sum(AH1, na.rm = T) + sum(AH1N12009, na.rm = T),
         n_H3N2 = sum(AH3, na.rm = T),
         n_A = n_H1N1 + n_H3N2,

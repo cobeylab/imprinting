@@ -20,7 +20,7 @@ region_data <- lapply(regions, function(region) {
     this_filepath <- sprintf("data-raw/who/%s/%s", tolower(region), this_file)
     read_csv(this_filepath, skip = 3, show_col_types = FALSE) %>% ## Read in the file
       group_by(`WHOREGION`, Year) %>% ## Summarize the number of positive samples of each subtype observed in each year
-      summarise(
+      dplyr::summarise(
         n_H1N1 = sum(AH1, na.rm = T) + sum(AH1N12009, na.rm = T),
         n_H3N2 = sum(AH3, na.rm = T),
         n_A = n_H1N1 + n_H3N2,
