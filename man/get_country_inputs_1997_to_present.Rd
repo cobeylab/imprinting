@@ -16,7 +16,6 @@ A tibble with the following columns:
 \itemize{
 \item \code{Country}: name of WHO region
 \item \code{Year}: calendar year of surveillance
-\item \code{n_x}: number of influenza specimens that tested positive for a specific subtype of influenza A (H1N1 or H3N2), lineage of influenza B (Yamagata or Victoria), or type of influenza (A or B). Note that \code{n_A} should be equal to \code{n_H1N1+n_H3N2} and \code{n_B} should be equal to `n_BYam+n_BVic
 \item \code{n_processed}: total specimens processed
 }
 }

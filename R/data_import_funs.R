@@ -4,7 +4,7 @@ THOMPSON_DATA <- readRDS(system.file("extdata", "THOMPSON_DATA.rds", package = "
 INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package = "imprinting"))
 
 # Ensure that filter() is the dplyr version
-filter <- dplyr::filter
+# filter <- dplyr::filter
 
 parse_region_names <- function(region) {
   ## Convert two-word region names for file import
@@ -22,6 +22,8 @@ parse_region_names <- function(region) {
 }
 
 parse_country_names <- function(this.country) {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  country <- flunet_country <- NULL
   ## check that this.country is a valid input
   if (!this.country %in% unlist(show_available_countries())) {
     stop(sprintf("%s is not valid. Run show_available_countries() for a list of valid inputs.", this.country))
@@ -61,8 +63,7 @@ check_max_year <- function(max_year) {
 #' @examples show_available_countries()
 #' @export
 show_available_countries <- function() {
-  COUNTRY_NAMES %>%
-    select(country)
+  tibble(country = COUNTRY_NAMES$country)
 }
 
 
@@ -73,9 +74,10 @@ show_available_countries <- function() {
 #' @examples show_available_regions()
 #' @export
 show_available_regions <- function() {
+  region <- NULL
   COUNTRY_NAMES %>%
     select(region) %>%
-    distinct() %>%
+    dplyr::distinct() %>%
     mutate(region = sapply(region, parse_region_names))
 }
 
@@ -94,6 +96,8 @@ get_WHO_region <- function(this.country) {
   if (!this.country %in% unlist(show_available_countries())) {
     stop(sprintf("%s is not valid. Run show_available_countries() for a list of valid inputs.", this.country))
   }
+  # Avoid nonstandard evaluation issues in CRAN.
+  country <- region <- NULL
   who_region <- COUNTRY_NAMES %>%
     dplyr::filter(tolower(country) == tolower(this.country)) %>%
     pull(region) %>%
@@ -101,7 +105,7 @@ get_WHO_region <- function(this.country) {
   ## If country not found, thorow an error and a help message
   if (length(who_region) < 1) {
     stop(sprintf("No country matching %s in database\n
-                 see for a list of valid country names and WHO regions", country))
+                 see for a list of valid country names and WHO regions", this.country))
   } else if (is.na(who_region)) {
     stop("who_region is NA. See processed-data/country_names_long_short.csv for raw reference.")
   }
@@ -120,20 +124,18 @@ get_WHO_region <- function(this.country) {
 #' * Country-specific data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12) will be appended to this template in later steps.
 #'
 #' @return A tibble with the following columns:
-#'
 #' * year
 #' * `A/H1N1`, `A/H2N2`, and `A/H3N2` show the fraction of influenza cases caused by each subtype.
 #' *  `A` = `A/H1N1` + `A/H2N2` + `A/H3N2`
 #' * `B` is a placeholder for future calculate of influenza B imprinting probabilities, which currently contains `NA`.
 #' * `group1` and `group2` show the fraction of cases caused by group 1 subtypes (H1N1 and H2N2), or group 2 (H3N2).
 #' * `data_from` notes the data source.
-#'
 #' @seealso [Gostic et al. Science, 2016](https://www.science.org/doi/10.1126/science.aag1322) for detailed methods.
-#'
-#' @examples `get_template_data()`
-#'
 #' @export
 get_template_data <- function() {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  n_A <- n_H1N1 <- n_H3N2 <- year <- `A/H1N1` <- `A/H2N2` <- `A/H3N2` <- B <- data_from <- NULL
+
   Thompson_df <- THOMPSON_DATA %>%
     mutate(
       `A/H1N1` = n_H1N1 / n_A,
@@ -181,7 +183,7 @@ get_template_data <- function() {
       group2 = `A/H3N2`,
       A = `A/H1N1` + `A/H2N2` + `A/H3N2`
     ) %>%
-    select(year, starts_with("A"), starts_with("B"), starts_with("group"), data_from) %>%
+    select(year, tidyselect::starts_with("A"), tidyselect::starts_with("B"), tidyselect::starts_with("group"), data_from) %>%
     dplyr::filter(year < 1997)
   ## Test
   test_rowsums_group(template$group1, template$group2)
@@ -213,6 +215,8 @@ get_template_data <- function() {
 #' @export
 get_regional_inputs_1997_to_present <- function(region,
                                                 max_year) {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  Year <- NULL
   check_max_year(max_year)
   valid_regions <- readRDS(system.file("extdata", "valid_regions.rds", package = "imprinting"))
   ## Throw an error and a help message if region doesn't exist
@@ -239,7 +243,6 @@ get_regional_inputs_1997_to_present <- function(region,
 #'
 #' * `Country`: name of WHO region
 #' * `Year`: calendar year of surveillance
-#' * `n_x`: number of influenza specimens that tested positive for a specific subtype of influenza A (H1N1 or H3N2), lineage of influenza B (Yamagata or Victoria), or type of influenza (A or B). Note that `n_A` should be equal to `n_H1N1+n_H3N2` and `n_B` should be equal to `n_BYam+n_BVic
 #' * `n_processed`: total specimens processed
 #'
 #' @examples
@@ -249,6 +252,8 @@ get_regional_inputs_1997_to_present <- function(region,
 #' @export
 get_country_inputs_1997_to_present <- function(country,
                                                max_year) { ## usually the current year
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  Year <- NULL
   check_max_year(max_year)
   who_region <- get_WHO_region(country)
   ## Throw an error and a help message if region doesn't exist
@@ -302,6 +307,8 @@ get_country_cocirculation_data <- function(country,
                                            max_year,
                                            min_samples = 30,
                                            output_format = "tibble") {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  n_A <- Year <- year <- n_H1N1 <- n_H3N2 <- `A/H1N1` <- `A/H3N2` <- `A/H2N2` <- data_from <- NULL
   check_max_year(max_year)
   template <- get_template_data()
   stopifnot(is.character(country))
@@ -327,8 +334,8 @@ get_country_cocirculation_data <- function(country,
     }) %>%
       bind_rows() %>%
       ## Get totals globally (for all regions)
-      group_by(Year) %>%
-      dplyr::summarise(across(tidyselect::starts_with("n_"), .fns = ~ sum(.x, na.rm = T))) %>%
+      dplyr::group_by(Year) %>%
+      dplyr::summarise(dplyr::across(tidyselect::starts_with("n_"), .fns = ~ sum(.x, na.rm = T))) %>%
       mutate(data_from = "global")
 
     ## Calculate the proportions of each subtype from counts,
@@ -350,7 +357,7 @@ get_country_cocirculation_data <- function(country,
         A = `A/H1N1` + `A/H2N2` + `A/H3N2`
       ) %>%
       rename(year = Year) %>%
-      select(year, starts_with("A"), starts_with("B"), starts_with("group"), data_from)
+      select(year, tidyselect::starts_with("A"), tidyselect::starts_with("B"), tidyselect::starts_with("group"), data_from)
 
     ## Combine with the template data for pre-1977 years
     full_outputs <- bind_rows(
@@ -399,6 +406,8 @@ get_country_intensity_data <- function(country,
                                        max_year,
                                        min_specimens = 50 ## If not enough observations available, default to regional data
 ) {
+  # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
+  n_A <- year <- n_processed <- n_B <- quality_check <- raw_intensity <- mean_intensity <- intensity <- Year <- NULL
   check_max_year(max_year)
   pre_1997_intensity <- INTENSITY_DATA %>% dplyr::filter(year <= 1997)
   ## Get country data, and only keep years in which there are enough samples to meet the threshold
@@ -453,8 +462,8 @@ get_country_intensity_data <- function(country,
       }) %>%
         bind_rows() %>%
         ## Get totals globally (for all regions)
-        group_by(Year) %>%
-        dplyr::summarise(across(tidyselect::contains("_"), .fns = ~ sum(.x, na.rm = T))) %>%
+        dplyr::group_by(Year) %>%
+        dplyr::summarise(dplyr::across(tidyselect::contains("_"), .fns = ~ sum(.x, na.rm = T))) %>%
         ## Quality checks
         mutate(
           data_from = paste0("global"),

@@ -35,42 +35,29 @@ Imprinting probabilities are calculated following \href{https://www.science.org/
 
 Then, after calculating the probability of imprinting 0, 1, 2, ... calendar years after birth, the model uses data on which subtypes circulated in each calendar year (from \code{\link[=get_country_cocirculation_data]{get_country_cocirculation_data()}}) to estimate that probability that a first infection was caused by each subtype. See \code{\link[=get_country_cocirculation_data]{get_country_cocirculation_data()}} for details about the underlying data sources.
 
-To calculate other kinds of imprinting probabilities (e.g. for specific clades, strains, or to include pediatric vaccination), users can specify custom circulation frequencies as a list, \link{annual_frequencies}. This list must contain one named element for each country in the \link{countries} input vector. Each list element must be a data frame or tibble whose first column is named "year" and contains numeric years from 1918:max(\link{observation_years}). Columns 2:N of the data frame must contain circulation frequencies that sum to 1 across each row, and each column must have a unique name indicating the exposure kind. E.g. column names could be {"year", "H1N1", "H2N2", "H3N2", "vaccinated"} to include probabilities of imprinting by vaccine, or {"year", "3C.3A", "not_3C.3A"} to calculate clade-specific probabilities.  Do not include a naive column. Any number of imprinting types is allowed, but the code is not optimized to run efficiently when the number of categories is very large. Frequencies within the column must be supplied by the user. See \href{https://www.nature.com/articles/s41467-021-24566-y}{Vieira et al. 2021} for methods to estimate circulation frequencies from sequence databases like \href{https://gisaid.org/}{GISAID} or the \href{https://www.ncbi.nlm.nih.gov/genomes/FLU/Database/nph-select.cgi?go=database}{NCBI Sequence Database}.
+To calculate other kinds of imprinting probabilities (e.g. for specific clades, strains, or to include pediatric vaccination), users can specify custom circulation frequencies as a list, \code{annual_frequencies}. This list must contain one named element for each country in the \code{countries} input vector. Each list element must be a data frame or tibble whose first column is named "year" and contains numeric years from 1918:max(\code{observation_years}). Columns 2:N of the data frame must contain circulation frequencies that sum to 1 across each row, and each column must have a unique name indicating the exposure kind. E.g. column names could be {"year", "H1N1", "H2N2", "H3N2", "vaccinated"} to include probabilities of imprinting by vaccine, or {"year", "3C.3A", "not_3C.3A"} to calculate clade-specific probabilities.  Do not include a naive column. Any number of imprinting types is allowed, but the code is not optimized to run efficiently when the number of categories is very large. Frequencies within the column must be supplied by the user. See \href{https://www.nature.com/articles/s41467-021-24566-y}{Vieira et al. 2021} for methods to estimate circulation frequencies from sequence databases like \href{https://gisaid.org/}{GISAID} or the \href{https://www.ncbi.nlm.nih.gov/genomes/FLU/Database/nph-select.cgi?go=database}{NCBI Sequence Database}.
 
-See \code{vignette("regular-expressions")} for use of a custom \link{annual_frequencies} input.
+See \code{vignette("regular-expressions")} for use of a custom \code{annual_frequencies} input.
 }
 \examples{
-===========================================================
-# Get imprinting probabilities for one country and year 
+# ===========================================================
+# Get imprinting probabilities for one country and year
 get_imprinting_probabilities(2022, "United States")
-===========================================================
+# ===========================================================
 # Return the same outputs in wide format
-get_imprinting_probabilities(2022, 
-                             "United States", 
-                             df_format = "wide")
-===========================================================
-# The observation year affects probabilities in cohorts young enough to remain naive (<12yo)
-get_imprinting_probabilities(
-  observation_years = c(2005, 2011, 2012, 2022),
-  countries = "United States",
+get_imprinting_probabilities(2022,
+  "United States",
   df_format = "wide"
-) \%>\%
-  dplyr::filter(birth_year == 2000) \%>\%
-  mutate(age_at_observation = year - birth_year)
-===========================================================
+)
+# ===========================================================
 # Return many countries and observation years simultaneously
-get_imprinting_probabilities(c(2000, 2003:2005, 2020), c("United States", "Mexico", "Guatemala", "Belize", "Honduras"))
-===========================================================
+library(dplyr)
+get_imprinting_probabilities(c(2000, 2003), 
+                             c("Mexico",
+                              "Belize"))
+# ===========================================================
 # Calculate custom imprinting probabilities to two imaginary strains of influenza A,
-the purple strain and the gold strain. Here, `made_up_frequencies` 
-satisfies all technical requirements of 'annual_frequencies'.
-
-made_up_frequencies = list("Japan" = data_frame(year = 1918:2022,
-                                                'purple' = runif(length(1918:2022)),
-                                                'gold' = 1-purple))
-get_imprinting_probabilities(observation_years = 2000,
-                             countries = "Japan",
-                             annual_frequencies = made_up_frequencies,
-                             df_format = "wide")
+# the purple strain and the gold strain. 
+# Run `vignette("custom-imprinting-types")` for a worked example.
 
 }
