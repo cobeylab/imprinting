@@ -11,3 +11,6 @@ data_pipeline.R
 ^pkgdown$
 ^\.github$
 ^LICENSE\.md$
+^local-files$
+README.Rmd
+^figure$
