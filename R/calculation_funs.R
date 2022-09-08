@@ -78,7 +78,7 @@ get_p_infection_year <- function(birth_year,
 to_long_df <- function(outlist) {
   # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
   year_country <- year <- country <- birth_year <- NULL
-  
+
   ## Reformat the list of matrix outputs into a long data frame
   reformat_one_list_element <- function(ll) {
     ## ll is a matrix whose columns represent birth years, and rows represent unique countries and years of observation
@@ -139,7 +139,7 @@ get_imprinting_probabilities <- function(observation_years,
                                          df_format = "long") {
   # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
   country <- year <- birth_year <- subtype <- NULL
-  
+
   ## Input checks
   current_year <- as.numeric(format(Sys.Date(), "%Y"))
   if (!all(observation_years >= 1918 & observation_years <= current_year)) {
@@ -190,7 +190,7 @@ get_imprinting_probabilities <- function(observation_years,
   }))) {
     stop("Each row in the annual_frequencies data frames (not including the year column) must sum to 1.")
   }
-  
+
   ## For each country, get imprinting probabilities
   # for (this_country in countries) {
   imprinting_probs <- lapply(countries, function(this_country) {
@@ -219,18 +219,18 @@ get_imprinting_probabilities <- function(observation_years,
   }) %>% # end loop across countries
     bind_rows() %>%
     select(year, country, birth_year, !c(year, country, birth_year))
-  
-  
+
+
   if (df_format == "wide") {
     return(imprinting_probs)
   } else {
     stopifnot(df_format == "long")
     return(imprinting_probs %>%
-             pivot_longer(-c(1:3),
-                          names_to = "subtype",
-                          values_to = "imprinting_prob"
-             ) %>%
-             arrange(subtype, dplyr::desc(birth_year)))
+      pivot_longer(-c(1:3),
+        names_to = "subtype",
+        values_to = "imprinting_prob"
+      ) %>%
+      arrange(subtype, dplyr::desc(birth_year)))
   }
 }
 
