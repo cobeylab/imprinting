@@ -135,7 +135,7 @@ get_WHO_region <- function(this.country) {
 get_template_data <- function() {
   # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
   n_A <- n_H1N1 <- n_H3N2 <- year <- `A/H1N1` <- `A/H2N2` <- `A/H3N2` <- B <- data_from <- NULL
-
+  
   Thompson_df <- THOMPSON_DATA %>%
     mutate(
       `A/H1N1` = n_H1N1 / n_A,
@@ -223,7 +223,7 @@ get_regional_inputs_1997_to_present <- function(region,
   if (!region %in% valid_regions) {
     stop(sprintf("%s is not valid. \n Run show_available_regions() for a list of valid region inputs.\n Run get_WHO_region('%s') to look up %s's WHO region", region, region, region))
   }
-
+  
   ## Load data from valid files
   region_data <- readRDS(system.file("extdata", "region_data.rds", package = "imprinting"))
   current_region_data <- region_data[[region]]
@@ -268,7 +268,7 @@ get_country_inputs_1997_to_present <- function(country,
   country_data <- readRDS(system.file("extdata", "country_data.rds", package = "imprinting"))
   current_country_data <- country_data[[country]] %>%
     dplyr::filter(Year <= max_year)
-
+  
   if (nrow(current_country_data) == 0) {
     stop(sprintf("No data in region %s for country %s\n Run show_available_countries() for a list of valid countries.\n Run get_WHO_region('%s') to look up %s's WHO region", who_region, country, country))
   }
@@ -316,7 +316,7 @@ get_country_cocirculation_data <- function(country,
     country <- country[1]
     warning(sprintf("country must be a vector of length 1. outputting results for the first country: %s", country))
   }
-
+  
   if (max_year > 1996) {
     ## Get country data, and only keep years in which there are enough samples to meet the threshold
     country_data <- get_country_inputs_1997_to_present(country, max_year) %>%
@@ -337,7 +337,7 @@ get_country_cocirculation_data <- function(country,
       dplyr::group_by(Year) %>%
       dplyr::summarise(dplyr::across(tidyselect::starts_with("n_"), .fns = ~ sum(.x, na.rm = T))) %>%
       mutate(data_from = "global")
-
+    
     ## Calculate the proportions of each subtype from counts,
     ## And reformat to match the template columns
     formatted_data <- bind_rows(
@@ -358,7 +358,7 @@ get_country_cocirculation_data <- function(country,
       ) %>%
       rename(year = Year) %>%
       select(year, tidyselect::starts_with("A"), tidyselect::starts_with("B"), tidyselect::starts_with("group"), data_from)
-
+    
     ## Combine with the template data for pre-1977 years
     full_outputs <- bind_rows(
       template,
@@ -368,7 +368,7 @@ get_country_cocirculation_data <- function(country,
     full_outputs <- template %>%
       dplyr::filter(year <= max_year)
   }
-
+  
   stopifnot(1918:max_year %in% full_outputs$year)
   test_rowsums_group(full_outputs$group1, group2 = full_outputs$group2)
   test_rowsums_subtype(full_outputs$`A/H1N1`, full_outputs$`A/H2N2`, full_outputs$`A/H3N2`)
@@ -416,7 +416,7 @@ get_country_intensity_data <- function(country,
     country <- country[1]
     warning(sprintf("country must be a vector of length 1. outputting results for the first country: %s", country))
   }
-
+  
   if (max_year > 1996) {
     country_data <- get_country_inputs_1997_to_present(country, max_year) %>%
       dplyr::filter(n_processed >= min_specimens) %>% ## Exclude country-years that don't meet the minimum sample size
@@ -427,11 +427,11 @@ get_country_intensity_data <- function(country,
         raw_intensity = n_A / n_processed,
         mean_intensity = mean(raw_intensity[quality_check == TRUE]),
         intensity = ifelse(quality_check == FALSE, 1,
-          ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+                           ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
         ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
-
+    
     ## Get regional data for years that don't meet the quality check and sample size requirements
     region_data <- get_regional_inputs_1997_to_present(get_WHO_region(country), max_year) %>%
       dplyr::filter(!(Year %in% country_data$Year)) %>% ## Exclude years in the country-specific data
@@ -444,16 +444,16 @@ get_country_intensity_data <- function(country,
         raw_intensity = n_A / n_processed,
         mean_intensity = mean(raw_intensity[quality_check == TRUE]),
         intensity = ifelse(quality_check == FALSE, 1,
-          ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+                           ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
         ), ## Define intensity relative to the mean
         intensity = pmin(intensity, 2.5)
       )
-
+    
     # Check for missing years
     # Which can occur if regional data also fails quality checks
     missing_years <- (1997:max_year)[!(1997:max_year %in% c(country_data$Year, region_data$Year))]
     global_data <- NULL
-
+    
     # Substitute global data if need be
     if (length(missing_years > 0)) {
       global_data <- lapply(show_available_regions()$region, function(rr) {
@@ -473,23 +473,23 @@ get_country_intensity_data <- function(country,
           raw_intensity = n_A / n_processed,
           mean_intensity = mean(raw_intensity[quality_check == TRUE]),
           intensity = ifelse(quality_check == FALSE, 1,
-            ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
+                             ifelse(mean_intensity == 0, 0, raw_intensity / mean_intensity)
           ), ## Define intensity relative to the mean
           intensity = pmin(intensity, 2.5)
         )
-
+      
       ## Quality checks: all global data pass quality control
       stopifnot(all(global_data$quality_check))
     }
-
+    
     ## Quality checks: all years are accounted for
     stopifnot(all(1997:max_year %in% c(
       country_data$Year,
       region_data$Year,
       global_data$Year
     )))
-
-
+    
+    
     ## Calculate the proportions of each subtype from counts,
     ## And reformat to match the template columns
     formatted_data <- bind_rows(
@@ -500,8 +500,8 @@ get_country_intensity_data <- function(country,
       rename(year = Year) %>%
       arrange(year) %>%
       select(year, intensity)
-
-
+    
+    
     ## Combine with the template data for pre-1977 years
     full_outputs <- bind_rows(
       pre_1997_intensity,
