@@ -124,18 +124,13 @@ get_WHO_region <- function(this.country) {
 #' * Country-specific data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12) will be appended to this template in later steps.
 #'
 #' @return A tibble with the following columns:
-#'
 #' * year
 #' * `A/H1N1`, `A/H2N2`, and `A/H3N2` show the fraction of influenza cases caused by each subtype.
 #' *  `A` = `A/H1N1` + `A/H2N2` + `A/H3N2`
 #' * `B` is a placeholder for future calculate of influenza B imprinting probabilities, which currently contains `NA`.
 #' * `group1` and `group2` show the fraction of cases caused by group 1 subtypes (H1N1 and H2N2), or group 2 (H3N2).
 #' * `data_from` notes the data source.
-#'
 #' @seealso [Gostic et al. Science, 2016](https://www.science.org/doi/10.1126/science.aag1322) for detailed methods.
-#'
-#' @examples `get_template_data()`
-#'
 #' @export
 get_template_data <- function() {
   # bind column name variables to function to avoid nonstandard evaluation issues in CRAN

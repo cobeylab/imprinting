@@ -23,7 +23,7 @@ INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package =
 #'  the output vector will have less than 13 entries.
 #'
 #' @examples
-#' # For a cohort >12  years old and born in 2000, return the
+#' # For a cohort under 12 years old and born in 2000, return the
 #' # probabilities of primary infection in 2000, 2001, ... 2012:
 #' get_p_infection_year(
 #'   birth_year = 2000,
@@ -32,14 +32,15 @@ INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package =
 #'   max_year = 2022
 #' )
 #'
-#' # For a cohort <12  years old, born in 2020, return the
-#' # probabilities of primary infection in 2020, 2021, and 2022:
+#' # If the cohort is still under age 12 at the time of observation, return
+#' # a truncated vector of probabilities:
 #' get_p_infection_year(
 #'   birth_year = 2020,
 #'   observation_year = 2022,
 #'   intensity_df = get_country_intensity_data("Mexico", 2022),
 #'   max_year = 2022
 #' )
+#'
 #' @export
 get_p_infection_year <- function(birth_year,
                                  observation_year,
@@ -112,7 +113,7 @@ to_long_df <- function(outlist) {
 #'
 #' To calculate other kinds of imprinting probabilities (e.g. for specific clades, strains, or to include pediatric vaccination), users can specify custom circulation frequencies as a list, `annual_frequencies`. This list must contain one named element for each country in the `countries` input vector. Each list element must be a data frame or tibble whose first column is named "year" and contains numeric years from 1918:max(`observation_years`). Columns 2:N of the data frame must contain circulation frequencies that sum to 1 across each row, and each column must have a unique name indicating the exposure kind. E.g. column names could be {"year", "H1N1", "H2N2", "H3N2", "vaccinated"} to include probabilities of imprinting by vaccine, or {"year", "3C.3A", "not_3C.3A"} to calculate clade-specific probabilities.  Do not include a naive column. Any number of imprinting types is allowed, but the code is not optimized to run efficiently when the number of categories is very large. Frequencies within the column must be supplied by the user. See [Vieira et al. 2021](https://www.nature.com/articles/s41467-021-24566-y) for methods to estimate circulation frequencies from sequence databases like [GISAID](https://gisaid.org/) or the [NCBI Sequence Database](https://www.ncbi.nlm.nih.gov/genomes/FLU/Database/nph-select.cgi?go=database).
 #'
-#' See `vignette("regular-expressions")` for use of a custom [annual_frequencies] input.
+#' See `vignette("regular-expressions")` for use of a custom `annual_frequencies` input.
 #'
 #' @return
 #' * If `format=long` (the default), a long tibble with columns showing the imprinting subtype (H1N1, H2N2, H3N2, or naive), the year of observation, the country, the birth year, and the imprinting probability.
@@ -120,6 +121,30 @@ to_long_df <- function(outlist) {
 #' For cohorts >12 years old in the year of observation, the probability of remaining naive is 0, and the subtype-specific probabilities are normalized to sum to 1. For cohorts <=12 years old in the year of observation, the probability of remaining naive is non-zero. For cohorts not yet born at the time of observation, all output probabilities are 0.
 #'
 #' @examples
+#' # ===========================================================
+#' # Get imprinting probabilities for one country and year
+#' get_imprinting_probabilities(2022, "United States")
+#' # ===========================================================
+#' # Return the same outputs in wide format
+#' get_imprinting_probabilities(2022,
+#'   "United States",
+#'   df_format = "wide"
+#' )
+#' # ===========================================================
+#' # Return many countries and observation years simultaneously
+#' library(dplyr)
+#' get_imprinting_probabilities(
+#'   c(2000, 2003),
+#'   c(
+#'     "Mexico",
+#'     "Belize"
+#'   )
+#' )
+#' # ===========================================================
+#' # Calculate custom imprinting probabilities to two imaginary strains of influenza A,
+#' # the purple strain and the gold strain.
+#' # Run `vignette("custom-imprinting-types")` for a worked example.
+#'
 #' @export
 get_imprinting_probabilities <- function(observation_years,
                                          countries,
@@ -232,7 +257,7 @@ get_probs_one_birth_year <- function(this_birth_year,
   year <- NULL
   ## Loop across birth years
   # get possible years of first infection for this birth year
-  # first infections can occur up to age 12, or up until the current year, whichever comes first
+  # first infections can occur up to age 11, or up until the current year, whichever comes first
   n_infection_years <- min(12, this_observation_year - this_birth_year)
   valid_infection_years <- this_birth_year + (0:n_infection_years)
   # get year-specific probabilities of primary infection
