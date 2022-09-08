@@ -41,21 +41,20 @@ The probability of primary influenza infection n years after birth is calculated
 This function modifies the geometric model above to account for changes in annual circulation intensity, so that annual probabilities of primary infection \eqn{p_i} are scaled by the intensity in calendar year i. Details are given in \href{https://www.science.org/doi/10.1126/science.aag1322}{Gostic et al. Science, 2016}.
 }
 \examples{
-# For a cohort >12  years old and born in 2000, return the 
-probabilities of primary infection in 2000, 2001, ... 2012:
+# For a cohort under 12 years old and born in 2000, return the
+# probabilities of primary infection in 2000, 2001, ... 2012:
 get_p_infection_year(
   birth_year = 2000,
   observation_year = 2022,
   intensity_df = get_country_intensity_data("Canada", 2022),
-  max_year = 2022
-)
+  max_year = 2022)
 
-#' # For a cohort <12  years old, born in 2020, return the 
-probabilities of primary infection in 2020, 2021, and 2022:
+# If the cohort is still under age 12 at the time of observation, return 
+# a truncated vector of probabilities:
 get_p_infection_year(
   birth_year = 2020,
   observation_year = 2022,
   intensity_df = get_country_intensity_data("Mexico", 2022),
-  max_year = 2022
-)
+  max_year = 2022)
+  
 }

@@ -25,10 +25,6 @@ A tibble with the following columns:
 \item Country-specific data from \href{https://apps.who.int/flumart/Default?ReportNo=12}{WHO Flu Mart} will be appended to this template in later steps.
 }
 }
-\examples{
-`get_template_data()`
-
-}
 \seealso{
 \href{https://www.science.org/doi/10.1126/science.aag1322}{Gostic et al. Science, 2016} for detailed methods.
 }

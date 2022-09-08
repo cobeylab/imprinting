@@ -23,10 +23,8 @@ time.
 }
 }
 \examples{
-plot_many_country_years(imprinting_df = get_imprinting_probabilities
-(observation_years = 2010:2022, countries = c("Spain", "Vietnam", 
-"France")))
-
-imprinting_df <- get_imprinting_probabilities(observation_years = 1997:2000, countries = c("Oman", "Indonesia"))
+imprinting_df <- get_imprinting_probabilities(
+                           observation_years = c(1997, 2015), 
+                           countries = c("Oman", "Indonesia"))
 plot_many_country_years(imprinting_df)
 }

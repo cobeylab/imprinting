@@ -37,5 +37,27 @@ Then, after calculating the probability of imprinting 0, 1, 2, ... calendar year
 
 To calculate other kinds of imprinting probabilities (e.g. for specific clades, strains, or to include pediatric vaccination), users can specify custom circulation frequencies as a list, \code{annual_frequencies}. This list must contain one named element for each country in the \code{countries} input vector. Each list element must be a data frame or tibble whose first column is named "year" and contains numeric years from 1918:max(\code{observation_years}). Columns 2:N of the data frame must contain circulation frequencies that sum to 1 across each row, and each column must have a unique name indicating the exposure kind. E.g. column names could be {"year", "H1N1", "H2N2", "H3N2", "vaccinated"} to include probabilities of imprinting by vaccine, or {"year", "3C.3A", "not_3C.3A"} to calculate clade-specific probabilities.  Do not include a naive column. Any number of imprinting types is allowed, but the code is not optimized to run efficiently when the number of categories is very large. Frequencies within the column must be supplied by the user. See \href{https://www.nature.com/articles/s41467-021-24566-y}{Vieira et al. 2021} for methods to estimate circulation frequencies from sequence databases like \href{https://gisaid.org/}{GISAID} or the \href{https://www.ncbi.nlm.nih.gov/genomes/FLU/Database/nph-select.cgi?go=database}{NCBI Sequence Database}.
 
-See \code{vignette("regular-expressions")} for use of a custom \link{annual_frequencies} input.
+See \code{vignette("regular-expressions")} for use of a custom \code{annual_frequencies} input.
+}
+\examples{
+# ===========================================================
+# Get imprinting probabilities for one country and year
+get_imprinting_probabilities(2022, "United States")
+# ===========================================================
+# Return the same outputs in wide format
+get_imprinting_probabilities(2022,
+  "United States",
+  df_format = "wide"
+)
+# ===========================================================
+# Return many countries and observation years simultaneously
+library(dplyr)
+get_imprinting_probabilities(c(2000, 2003), 
+                             c("Mexico",
+                              "Belize"))
+# ===========================================================
+# Calculate custom imprinting probabilities to two imaginary strains of influenza A,
+# the purple strain and the gold strain. 
+# Run `vignette("custom-imprinting-types")` for a worked example.
+
 }
