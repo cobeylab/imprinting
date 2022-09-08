@@ -24,7 +24,13 @@ get_p_infection_year(
 \item{baseline_annual_p_infection}{average annual probability of primary infection. The default, 0.28, was estimated using age-seroprevalence data in \href{https://www.science.org/doi/10.1126/science.aag1322}{Gostic et al. 2016}.}
 }
 \value{
-a vector whose entries show the probability that a person born in year 0 was first infected by influenza in year 0, 1, 2, 3, ...  We only consider the first 13 probabilities. These outputs are not normalized, so the vector sum asymptotically approaches one, but is not exactly equal to one. For cohorts born <13 years prior to the year of observation, the output vector will have less than 13 entries.
+a vector whose entries show the probability that a person born
+in year 0 was first infected by influenza in year 0, 1, 2, 3, ...12
+We only consider the first 13 probabilities (i.e. we assume everyone
+imprints before age 13. These outputs are not normalized, so the
+vector sum asymptotically approaches one, but is not exactly equal
+to one. For cohorts born <13 years prior to the year of observation,
+the output vector will have less than 13 entries.
 }
 \description{
 Given an individual's birth year, the year of observation, and pre-calculated influenza circulation intensities, calculate the probability that the first influenza infection occurs exactly 0, 1, 2, ... 12 years after birth.
@@ -35,7 +41,8 @@ The probability of primary influenza infection n years after birth is calculated
 This function modifies the geometric model above to account for changes in annual circulation intensity, so that annual probabilities of primary infection \eqn{p_i} are scaled by the intensity in calendar year i. Details are given in \href{https://www.science.org/doi/10.1126/science.aag1322}{Gostic et al. Science, 2016}.
 }
 \examples{
-# For a cohort >12  years old and born in 2000, return the probabilities of primary infection in 2000, 2001, ... 2012:
+# For a cohort >12  years old and born in 2000, return the 
+probabilities of primary infection in 2000, 2001, ... 2012:
 get_p_infection_year(
   birth_year = 2000,
   observation_year = 2022,
@@ -43,7 +50,8 @@ get_p_infection_year(
   max_year = 2022
 )
 
-#' # For a cohort <12  years old, born in 2020, return the probabilities of primary infection in 2020, 2021, and 2022:
+#' # For a cohort <12  years old, born in 2020, return the 
+probabilities of primary infection in 2020, 2021, and 2022:
 get_p_infection_year(
   birth_year = 2020,
   observation_year = 2022,

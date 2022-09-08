@@ -13,8 +13,14 @@ plot_one_country_year(imprinting_df, country = NULL, year = NULL)
 Generate a stacked barplot, where each bar represents a birth cohort, and the colors within the bar show the probabilities that someone born in that cohort has a particular imprinting status.
 }
 \examples{
-plot_one_country_year(imprinting_df = get_imprinting_probabilities(observation_years = 2022, countries = "Aruba"))
+plot_one_country_year(imprinting_df = get_imprinting_probabilities
+(observation_years = 2022, countries = "Aruba"))
 
-imprinting_df <- get_imprinting_probabilities(observation_years = 1997, countries = c("Algeria", "South Africa"))
+imprinting_df <- get_imprinting_probabilities(
+                                   observation_years = 1997, 
+                                   countries = c(
+                                   "Algeria", 
+                                   "South Africa"))
+                                   
 plot_one_country_year(imprinting_df)
 }
