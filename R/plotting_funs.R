@@ -11,7 +11,7 @@
 #' @examples
 #' # Generate imprinting probabilities for one country and year
 #' imprinting_df = get_imprinting_probabilities(observation_years = 2022, 
-#'                                            countries = "Aruba")
+#'                                              countries = "Aruba")
 #' plot_one_country_year(imprinting_df)
 #'
 #' # If we generate probabilities for more than one country and year, 

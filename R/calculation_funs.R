@@ -24,7 +24,7 @@ INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package =
 #'
 #' @examples
 #' # For a cohort >12  years old and born in 2000, return the 
-#' probabilities of primary infection in 2000, 2001, ... 2012:
+#' # probabilities of primary infection in 2000, 2001, ... 2012:
 #' get_p_infection_year(
 #'   birth_year = 2000,
 #'   observation_year = 2022,
@@ -32,8 +32,8 @@ INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package =
 #'   max_year = 2022
 #' )
 #'
-#' #' # For a cohort <12  years old, born in 2020, return the 
-#' probabilities of primary infection in 2020, 2021, and 2022:
+#' # For a cohort <12  years old, born in 2020, return the 
+#' # probabilities of primary infection in 2020, 2021, and 2022:
 #' get_p_infection_year(
 #'   birth_year = 2020,
 #'   observation_year = 2022,
