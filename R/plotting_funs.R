@@ -2,21 +2,50 @@
 
 #' Plot imprinting probabilities for a single country and year
 #'
-#' Generate a stacked barplot, where each bar represents a birth cohort, and the colors within the bar show the probabilities that someone born in that cohort has a particular imprinting status.
+#' Generate a stacked barplot, where each bar represents a birth cohort, and the colors within the bar show the probabilities that someone born in that cohort has a particular imprinting status. If the data frame contains more than one country or observation year, the first country-year is plotted by default. Specify other countries and years using the country and year options.
 #'
 #' @param imprinting_df A long data frame of imprinted probabilities output by [get_imprinting_probabilities()]. If the data frame contains more than one country and year, on the first will be plotted.
+#' @country An optional country name to plot. The input country name must exist in the imprinting_df.
+#' @year Similar to country, and optional input specifying the year for which to plot.
 #'
 #' @examples
-#' plot_one_country_year(imprinting_df = get_imprinting_probabilities(observation_years = 2022, countries = "Aruba"))
-#'
-#' imprinting_df <- get_imprinting_probabilities(observation_years = 1997, countries = c("Algeria", "South Africa"))
+#' # Generate imprinting probabilities for one country and year
+#' imprinting_df = get_imprinting_probabilities(observation_years = 2022, 
+#'                                            countries = "Aruba")
 #' plot_one_country_year(imprinting_df)
+#'
+#' # If we generate probabilities for more than one country and year, 
+#' imprinting_df <- get_imprinting_probabilities(
+#'                                    observation_years = c(1997, 2001),
+#'                                    countries = c(
+#'                                    "Algeria", 
+#'                                    "South Africa"))
+#'                                    
+#' The default is to plot the first country year in the outputs
+#' plot_one_country_year(imprinting_df)
+#' 
+#' Or, specify a country and year of interest (must exist in the
+#'  imprinting_df)
+#'  plot_one_country_year(imprinting_df, 
+#'                        country = "South Africa",
+#'                        year = 2001)
+#' 
 #' @export
 plot_one_country_year <- function(imprinting_df,
                                   country = NULL,
                                   year = NULL) {
   # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
   birth_year <- imprinting_prob <- subtype <- NULL
+  
+  # if countries and years are specificied, check that they exist in the data frame
+  if(length(country)>0){
+    stopifnot(country %in% imprinting_df$country)
+    stopifnot(length(country) == 1)
+  }
+  if(length(year)>0){
+    stopifnot(year %in% imprinting_df$year)
+    stopifnot(length(year) == 1)
+  }
 
   if (ncol(imprinting_df) > 5) {
     stop("imprinting_df must be in long format, output from get_imprinting_probabilities()")
@@ -45,20 +74,28 @@ plot_one_country_year <- function(imprinting_df,
     ylab("Imprinting fraction") +
     scale_color_manual(values = colors, aesthetics = c("color", "fill")) +
     scale_x_continuous(breaks = axis_ticks, labels = axis_tick_labs) +
-    ggtitle(sprintf("Probabilities for %s in %i", country, obs_year))
+    ggtitle(sprintf("Probabilities for %s in %i", this_country, obs_year))
 }
 
 
 #' Plot imprinting probabilities for up to five country-years
 #'
 #' For each country and year, generate two plots:
-#' * A stacked barplot, where each bar represents a birth cohort, and the colors within the bar show the probabilities that someone born in that cohort has a particular imprinting status, for the first observation year.
-#' * A lineplot showing the age-specific probability of imprinting to H3N2 in the first and last observation year. When the data contain more than one observation year, this plot shows how cohorts age over time.
+#' * A stacked barplot, where each bar represents a birth cohort, and 
+#' the colors within the bar show the probabilities that someone born 
+#' in that cohort has a particular imprinting status, for the first 
+#' observation year.
+#' * A lineplot showing the age-specific probability of imprinting to 
+#' H3N2 in the first and last observation year. When the data contain 
+#' more than one observation year, this plot shows how cohorts age over
+#' time.
 #'
 #' @param imprinting_df A long data frame of imprinted probabilities output by [get_imprinting_probabilities()]. Up to five countries and an arbitrary span of years can be plotted.
 #'
 #' @examples
-#' plot_many_country_years(imprinting_df = get_imprinting_probabilities(observation_years = 2010:2022, countries = c("Spain", "Vietnam", "France")))
+#' plot_many_country_years(imprinting_df = get_imprinting_probabilities
+#' (observation_years = 2010:2022, countries = c("Spain", "Vietnam", 
+#' "France")))
 #'
 #' imprinting_df <- get_imprinting_probabilities(observation_years = 1997:2000, countries = c("Oman", "Indonesia"))
 #' plot_many_country_years(imprinting_df)
