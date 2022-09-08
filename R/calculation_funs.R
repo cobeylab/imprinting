@@ -130,7 +130,6 @@ to_long_df <- function(outlist) {
 #'   "United States",
 #'   df_format = "wide"
 #' )
-#' )
 #'
 #' @export
 get_imprinting_probabilities <- function(observation_years,
