@@ -1,8 +1,8 @@
 Package: imprinting
 Type: Package
-Title: Calculate Birth Year-Specific Probabilities of Immune Imprinting to Influenza A
+Title: Calculate Birth Year-Specific Probabilities of Immune Imprinting to Influenza
 Version: 0.1.0
-Authors@R: 
+Authors@R:
     c(person(given = "Katelyn",
              family = "Gostic",
              role = c("aut"),
