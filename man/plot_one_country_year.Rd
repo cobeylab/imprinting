@@ -18,24 +18,29 @@ Generate a stacked barplot, where each bar represents a birth cohort, and the co
 }
 \examples{
 # Generate imprinting probabilities for one country and year
-imprinting_df = get_imprinting_probabilities(observation_years = 2022, 
-                                             countries = "Aruba")
+imprinting_df <- get_imprinting_probabilities(
+  observation_years = 2022,
+  countries = "Aruba"
+)
 plot_one_country_year(imprinting_df)
 
-# If we generate probabilities for more than one country and year, 
+# If we generate probabilities for more than one country and year,
 imprinting_df <- get_imprinting_probabilities(
-                                   observation_years = c(1997, 2001),
-                                   countries = c(
-                                   "Algeria", 
-                                   "South Africa"))
-                                   
+  observation_years = c(1997, 2001),
+  countries = c(
+    "Algeria",
+    "South Africa"
+  )
+)
+
 # The default is to plot the first country year in the outputs
 plot_one_country_year(imprinting_df)
 
 # Or, specify a country and year of interest (both must exist in the
 # imprinting_df).
- plot_one_country_year(imprinting_df, 
-                       country = "South Africa",
-                       year = 2001)
+plot_one_country_year(imprinting_df,
+  country = "South Africa",
+  year = 2001
+)
 
 }
