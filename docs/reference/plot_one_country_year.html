@@ -76,27 +76,32 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Generate imprinting probabilities for one country and year</span></span></span>
-<span class="r-in"><span><span class="va">imprinting_df</span> <span class="op">=</span> <span class="fu"><a href="get_imprinting_probabilities.html">get_imprinting_probabilities</a></span><span class="op">(</span>observation_years <span class="op">=</span> <span class="fl">2022</span>, </span></span>
-<span class="r-in"><span>                                             countries <span class="op">=</span> <span class="st">"Aruba"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">imprinting_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_imprinting_probabilities.html">get_imprinting_probabilities</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  observation_years <span class="op">=</span> <span class="fl">2022</span>,</span></span>
+<span class="r-in"><span>  countries <span class="op">=</span> <span class="st">"Aruba"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">plot_one_country_year</span><span class="op">(</span><span class="va">imprinting_df</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_one_country_year-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># If we generate probabilities for more than one country and year, </span></span></span>
+<span class="r-in"><span><span class="co"># If we generate probabilities for more than one country and year,</span></span></span>
 <span class="r-in"><span><span class="va">imprinting_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_imprinting_probabilities.html">get_imprinting_probabilities</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>                                   observation_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1997</span>, <span class="fl">2001</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                   countries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>                                   <span class="st">"Algeria"</span>, </span></span>
-<span class="r-in"><span>                                   <span class="st">"South Africa"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>                                   </span></span>
+<span class="r-in"><span>  observation_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1997</span>, <span class="fl">2001</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  countries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"Algeria"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"South Africa"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The default is to plot the first country year in the outputs</span></span></span>
 <span class="r-in"><span><span class="fu">plot_one_country_year</span><span class="op">(</span><span class="va">imprinting_df</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_one_country_year-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or, specify a country and year of interest (both must exist in the</span></span></span>
 <span class="r-in"><span><span class="co"># imprinting_df).</span></span></span>
-<span class="r-in"><span> <span class="fu">plot_one_country_year</span><span class="op">(</span><span class="va">imprinting_df</span>, </span></span>
-<span class="r-in"><span>                       country <span class="op">=</span> <span class="st">"South Africa"</span>,</span></span>
-<span class="r-in"><span>                       year <span class="op">=</span> <span class="fl">2001</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_one_country_year</span><span class="op">(</span><span class="va">imprinting_df</span>,</span></span>
+<span class="r-in"><span>  country <span class="op">=</span> <span class="st">"South Africa"</span>,</span></span>
+<span class="r-in"><span>  year <span class="op">=</span> <span class="fl">2001</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_one_country_year-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
