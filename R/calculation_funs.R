@@ -53,6 +53,7 @@ get_p_infection_year <- function(birth_year,
   ## OUTPUTS
   ##    - vector of 13 probabilities, the first representing the probability of first flu infection in the first year of life (age 0), the second representing the probability of first flu infection in the second year of life (age 1), and so on up to the 13th year of life (age 12)
   stopifnot(observation_year <= max_year)
+  stopifnot(birth_year <= observation_year)
   # Weighted attack rate = annual prob infection weighted by circulation intensity
   weighted.attack.rate <- baseline_annual_p_infection * (intensity_df$intensity)
   names(weighted.attack.rate) <- intensity_df$year
@@ -202,7 +203,7 @@ get_imprinting_probabilities <- function(observation_years,
     # Calculate country-specific imprinting probs
     lapply(1:length(observation_years), function(jj) {
       ## Loop across birth years
-      lapply(1918:max_year, FUN = function(bb) {
+      lapply(1918:observation_years[jj], FUN = function(bb) {
         get_probs_one_birth_year(
           this_birth_year = bb,
           this_observation_year = observation_years[jj],
@@ -241,6 +242,11 @@ get_probs_one_birth_year <- function(this_birth_year,
                                      these_annual_frequencies) {
   # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
   year <- NULL
+  ## If the cohort has not yet been born, return NA
+  if(this_birth_year > this_observation_year){
+    imprinting_probs = rep(NA, ncol(these_annual_frequencies))
+    names(imprinting_probs) = c(names(these_annual_frequencies)[-1], 'naive')
+  }else{
   ## Loop across birth years
   # get possible years of first infection for this birth year
   # first infections can occur up to age 11, or up until the current year, whichever comes first
@@ -264,6 +270,8 @@ get_probs_one_birth_year <- function(this_birth_year,
     as.matrix()
   imprinting_probs <- colSums(freq_mat * inf.probs) # Get type-specific probabilities
   imprinting_probs <- c(imprinting_probs, "naive" = 1 - sum(imprinting_probs)) # Add the naive probability
+  }
+  # Return
   c(
     year = this_observation_year,
     birth_year = this_birth_year,
