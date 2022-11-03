@@ -98,11 +98,11 @@ plot_one_country_year <- function(imprinting_df,
 #' @param imprinting_df A long data frame of imprinted probabilities output by [get_imprinting_probabilities()]. Up to five countries and an arbitrary span of years can be plotted.
 #'
 #' @examples
-#' imprinting_df <- get_imprinting_probabilities(
-#'   observation_years = c(1997, 1998),
-#'   countries = c("Oman", "Indonesia")
-#' )
 #' # Note: May be resource intensive.
+#' # imprinting_df <- get_imprinting_probabilities(
+#' # observation_years = c(1997, 1998),
+#' # countries = c("Oman", "Indonesia")
+#' # )
 #' # plot_many_country_years(imprinting_df)
 #' @export
 plot_many_country_years <- function(imprinting_df) {
