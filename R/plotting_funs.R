@@ -100,7 +100,7 @@ plot_one_country_year <- function(imprinting_df,
 #' @examples
 #' # Note: May be resource intensive.
 #' # imprinting_df <- get_imprinting_probabilities(
-#' # observation_years = c(1997, 1998),
+#' # observation_years = c(1920, 1921),
 #' # countries = c("Oman", "Indonesia")
 #' # )
 #' # plot_many_country_years(imprinting_df)
