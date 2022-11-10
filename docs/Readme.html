@@ -47,14 +47,14 @@
 </div>
 <div class="section level1">
 <h1 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a></h1>
-<p>imprinting is an R package to reconstruct birth year-specific probabilities of imprinting to each subtype of influenza A, H1N1, H2N2, H3N2. We may add the ability to reconstruct imprinting to influenza B in the future. Reconstructions are done following the methods of <a href="https://www.science.org/doi/10.1126/science.aag1322" class="external-link">(Gostic et al. 2016)</a>.</p>
+<p>imprinting is an R package to reconstruct birth year-specific probabilities of imprinting to each subtype of influenza A, H1N1, H2N2, H3N2. We may add the ability to reconstruct imprinting to influenza B in the future. Reconstructions are done following the methods of <a href="https://doi.org/10.1128/mBio.00204-19" class="external-link">(Gostic et al. 2016)</a>.</p>
 <ul><li>
 <code><a href="reference/get_imprinting_probabilities.html">get_imprinting_probabilities()</a></code> returns a data frame containing birth year-specific probabilities of imprinting to H1N1, H2N2, or H3N2 for an individual in each input country and year of observation.</li>
 <li>
 <code><a href="reference/show_available_countries.html">show_available_countries()</a></code> lists the available countries (those with data in <a href="https://apps.who.int/flumart/Default?ReportNo=12" class="external-link">WHO Flu Mart</a>), with valid spellings.</li>
 <li>
 <code><a href="reference/plot_one_country_year.html">plot_one_country_year()</a></code> and <code><a href="reference/plot_many_country_years.html">plot_many_country_years()</a></code> generates plots using the outputs of <code>get_imprinting_probabilites()</code>.</li>
-</ul><p>The generated probabilities may be modified, plotted, and used in independent research. Please cite <a href="https://www.science.org/doi/10.1126/science.aag1322" class="external-link">(Gostic et al. 2016)</a>, and this package (<code>citation("imprinting")</code>).</p>
+</ul><p>The generated probabilities may be modified, plotted, and used in independent research. Please cite <a href="https://doi.org/10.1128/mBio.00204-19" class="external-link">(Gostic et al. 2016)</a>, and this package (<code>citation("imprinting")</code>).</p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a></h1>
@@ -113,7 +113,7 @@
 <div class="section level2">
 <h2 id="id_2-intensity-data">2. Intensity data<a class="anchor" aria-label="anchor" href="#id_2-intensity-data"></a></h2>
 <p>Children are more likely to imprint in years with high levels of influenza A circulation. We define an annual intensity score to characterize annual circulation intensity, and to scale the annual probability of primary infection. By definition, a circulation intensity of 1 indicates average levels of influenza ciruclation. We use three kinds of data to characterize annual circulation intensity:</p>
-<ul><li><p><strong>For 1918-1996</strong>, we calculate annual intensity using the methods of <a href="https://www.science.org/doi/10.1126/science.aag1322" class="external-link">Gostic et al. 2016</a>. From 1918-1976, intensity scores are informed by Pneumonia and Influenza excess mortaltity estimates <a href="https://academic.oup.com/aje/article-abstract/100/1/40/226436" class="external-link">Housworth et al. 1974</a>, and from 1976-1977, intensity scores are informed by the influenza A test-positive fraction reported in Table 1 of <a href="https://jamanetwork.com/journals/jama/fullarticle/195750" class="external-link">Thompson et al. JAMA, 2003</a>.</p></li>
+<ul><li><p><strong>For 1918-1996</strong>, we calculate annual intensity using the methods of <a href="https://doi.org/10.1128/mBio.00204-19" class="external-link">Gostic et al. 2016</a>. From 1918-1976, intensity scores are informed by Pneumonia and Influenza excess mortaltity estimates <a href="https://academic.oup.com/aje/article-abstract/100/1/40/226436" class="external-link">Housworth et al. 1974</a>, and from 1976-1977, intensity scores are informed by the influenza A test-positive fraction reported in Table 1 of <a href="https://jamanetwork.com/journals/jama/fullarticle/195750" class="external-link">Thompson et al. JAMA, 2003</a>.</p></li>
 <li><p>For <strong>1997-present</strong>, we calculate country or region-specific intensities using surveillance data from WHO Flu Mart. Intensity is calculated as: [fraction of processed samples positive for flu A]/[mean fraction of processed samples positive for flu A]. Country-specific data are used by default. Regional data are substituted when there are an insufficient number of country-specific specimens.</p></li>
 </ul></div>
 </div>
