@@ -8,6 +8,7 @@
 #' @param country An optional country name to plot. The input country name must exist in the imprinting_df.
 #' @param year Similar to country, and optional input specifying the year for which to plot.
 #'
+#' @return No return value. Opens a plot of the data frame.
 #' @examples
 #' # Generate imprinting probabilities for one country and year
 #' imprinting_df <- get_imprinting_probabilities(
@@ -96,6 +97,7 @@ plot_one_country_year <- function(imprinting_df,
 #' time.
 #'
 #' @param imprinting_df A long data frame of imprinted probabilities output by [get_imprinting_probabilities()]. Up to five countries and an arbitrary span of years can be plotted.
+#' @return No return value. Opens a plot of the data frame.
 #'
 #' @examples
 #' imprinting_df <- get_imprinting_probabilities(

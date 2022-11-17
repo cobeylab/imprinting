@@ -9,6 +9,9 @@ plot_many_country_years(imprinting_df)
 \arguments{
 \item{imprinting_df}{A long data frame of imprinted probabilities output by \code{\link[=get_imprinting_probabilities]{get_imprinting_probabilities()}}. Up to five countries and an arbitrary span of years can be plotted.}
 }
+\value{
+No return value. Opens a plot of the data frame.
+}
 \description{
 For each country and year, generate two plots:
 \itemize{

@@ -21,7 +21,7 @@ library(dplyr)
   
 # Generate probabilities of imprinting to custom subsets of influenza A viruses
   
-By default, `get_imprinting_probabilities()` calculates subtype-specific probabilities of imprinting to influenza A H1N1, H2N2, or H3N2. Researchers may want to calculate different kinds of imprinting probabilities. E.g. perhaps we want to study imprinting to specific influenza isolates, clades, [glycosylation states](https://journals.asm.org/doi/10.1128/mBio.00204-19), or to a multivalent vaccine.
+By default, `get_imprinting_probabilities()` calculates subtype-specific probabilities of imprinting to influenza A H1N1, H2N2, or H3N2. Researchers may want to calculate different kinds of imprinting probabilities. E.g. perhaps we want to study imprinting to specific influenza isolates, clades, [glycosylation states](https://doi.org/10.1128/mBio.00204-19), or to a multivalent vaccine.
 
 
 To calculate imprinting to custom groups of influenza A viruses, use the `annual_frequencies` option in `get_imprinting_probabilities()`. 

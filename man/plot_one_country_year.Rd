@@ -13,6 +13,9 @@ plot_one_country_year(imprinting_df, country = NULL, year = NULL)
 
 \item{year}{Similar to country, and optional input specifying the year for which to plot.}
 }
+\value{
+No return value. Opens a plot of the data frame.
+}
 \description{
 Generate a stacked barplot, where each bar represents a birth cohort, and the colors within the bar show the probabilities that someone born in that cohort has a particular imprinting status. If the data frame contains more than one country or observation year, the first country-year is plotted by default. Specify other countries and years using the country and year options.
 }

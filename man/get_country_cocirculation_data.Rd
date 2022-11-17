@@ -40,5 +40,5 @@ get_country_cocirculation_data("Laos", "2022", min_samples = 40)
 
 }
 \seealso{
-See \href{https://www.science.org/doi/10.1126/science.aag1322}{Gostic et al. Science, 2016} for details.
+\doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)} for detailed methods.
 }
