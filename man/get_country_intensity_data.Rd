@@ -17,7 +17,7 @@ get_country_intensity_data(country, max_year, min_specimens = 50)
 A tibble showing the year and intensity score.
 }
 \description{
-\verb{get_country_intensity data()} returns data on the annual intensity of influenza circulation in each calendar year. Following \href{https://doi.org/10.1128/mBio.00204-19}{Gostic et al. Science, 2016}, we define 1 as the average intensity. Seasons with intensities greater than 1 have more flu A circulation than average, and seasons with intensities less than 1 are mild.
+\verb{get_country_intensity data()} returns data on the annual intensity of influenza circulation in each calendar year. Following \doi{doi:10.1126/science.aag1322}{Gostic et al. Science, 2016}, we define 1 as the average intensity. Seasons with intensities greater than 1 have more flu A circulation than average, and seasons with intensities less than 1 are mild.
 }
 \details{
 For 1918-1996, we use annual intensities from Gostic et al., Science, 2016. For 1997-present, we calculate country or region-specific intensities using surveillance data from \href{https://apps.who.int/flumart/Default?ReportNo=12}{WHO Flu Mart}. Intensity is calculated as:

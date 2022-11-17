@@ -26,5 +26,5 @@ A tibble with the following columns:
 }
 }
 \seealso{
-\href{https://doi.org/10.1128/mBio.00204-19}{Gostic et al. Science, 2016} for detailed methods.
+\doi{doi:10.1126/science.aag1322}{Gostic et al. Science, 2016} for detailed methods.
 }
