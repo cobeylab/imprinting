@@ -21,7 +21,7 @@ get_p_infection_year(
 
 \item{max_year}{maximum year for which to output probabilities. Must be greater than or equal to observation_year. (If in doubt, set equal to observation year.)}
 
-\item{baseline_annual_p_infection}{average annual probability of primary infection. The default, 0.28, was estimated using age-seroprevalence data in \href{https://doi.org/10.1128/mBio.00204-19}{Gostic et al. 2016}.}
+\item{baseline_annual_p_infection}{average annual probability of primary infection. The default, 0.28, was estimated using age-seroprevalence data in \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)}.}
 }
 \value{
 a vector whose entries show the probability that a person born
@@ -38,7 +38,7 @@ Given an individual's birth year, the year of observation, and pre-calculated in
 \details{
 The probability of primary influenza infection n years after birth is calculated based on a modified \href{https://en.wikipedia.org/wiki/Geometric_distribution}{geometric distribution}: let p be the average annual probability of a primary influenza infection. Then the probability that primary infection occurs n=0,1,2,... years after birth is \eqn{p*(1-p)^{n}}.
 
-This function modifies the geometric model above to account for changes in annual circulation intensity, so that annual probabilities of primary infection \eqn{p_i} are scaled by the intensity in calendar year i. Details are given in \href{https://doi.org/10.1128/mBio.00204-19}{Gostic et al. Science, 2016}.
+This function modifies the geometric model above to account for changes in annual circulation intensity, so that annual probabilities of primary infection \eqn{p_i} are scaled by the intensity in calendar year i. Details are given in \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)}.
 }
 \examples{
 # For a cohort under 12 years old and born in 2000, return the

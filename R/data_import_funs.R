@@ -130,7 +130,7 @@ get_WHO_region <- function(this.country) {
 #' * `B` is a placeholder for future calculate of influenza B imprinting probabilities, which currently contains `NA`.
 #' * `group1` and `group2` show the fraction of cases caused by group 1 subtypes (H1N1 and H2N2), or group 2 (H3N2).
 #' * `data_from` notes the data source.
-#' @seealso [Gostic et al. Science, 2016](https://doi.org/10.1128/mBio.00204-19) for detailed methods.
+#' @seealso \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)} for detailed methods.
 #' @export
 get_template_data <- function() {
   # bind column name variables to function to avoid nonstandard evaluation issues in CRAN
@@ -300,7 +300,7 @@ get_country_inputs_1997_to_present <- function(country,
 #' get_country_cocirculation_data("United States", "2019")
 #' get_country_cocirculation_data("Laos", "2022", min_samples = 40)
 #'
-#' @seealso See [Gostic et al. Science, 2016](https://doi.org/10.1128/mBio.00204-19) for details.
+#' @seealso \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)} for detailed methods.
 #'
 #' @export
 get_country_cocirculation_data <- function(country,
@@ -389,10 +389,10 @@ get_country_cocirculation_data <- function(country,
 #' Get the relative intensity of influenza A circulation
 #'
 #' @description
-#' `get_country_intensity data()` returns data on the annual intensity of influenza circulation in each calendar year. Following [Gostic et al. Science, 2016](https://doi.org/10.1128/mBio.00204-19), we define 1 as the average intensity. Seasons with intensities greater than 1 have more flu A circulation than average, and seasons with intensities less than 1 are mild.
+#' `get_country_intensity data()` returns data on the annual intensity of influenza circulation in each calendar year. Following \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)}, we define 1 as the average intensity. Seasons with intensities greater than 1 have more flu A circulation than average, and seasons with intensities less than 1 are mild.
 #'
 #' @details
-#' For 1918-1996, we use annual intensities from Gostic et al., Science, 2016. For 1997-present, we calculate country or region-specific intensities using surveillance data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12). Intensity is calculated as:
+#' For 1918-1996, we use annual intensities from Gostic et al., Science, (2016). For 1997-present, we calculate country or region-specific intensities using surveillance data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12). Intensity is calculated as:
 #'  \[fraction of processed samples positive for flu A\]/\[mean fraction of processed samples positive for flu A\].
 #'  Country-specific data are used by default. Regional or global data are substituted when country-specific data contain too few observations or fail quality checks. Global data are only used in years when regional data are insufficient.
 #'

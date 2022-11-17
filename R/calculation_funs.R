@@ -6,13 +6,13 @@ INTENSITY_DATA <- readRDS(system.file("extdata", "INTENSITY_DATA.rds", package =
 #'
 #' @details The probability of primary influenza infection n years after birth is calculated based on a modified [geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution): let p be the average annual probability of a primary influenza infection. Then the probability that primary infection occurs n=0,1,2,... years after birth is \eqn{p*(1-p)^{n}}.
 #'
-#' This function modifies the geometric model above to account for changes in annual circulation intensity, so that annual probabilities of primary infection \eqn{p_i} are scaled by the intensity in calendar year i. Details are given in [Gostic et al. Science, 2016](https://doi.org/10.1128/mBio.00204-19).
+#' This function modifies the geometric model above to account for changes in annual circulation intensity, so that annual probabilities of primary infection \eqn{p_i} are scaled by the intensity in calendar year i. Details are given in \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)}.
 #'
 #' @param birth_year year of birth (numeric). Must be between 1918 and the current calendar year.
 #' @param observation_year year of observation, which affects the birth cohort's age.
 #' @param intensity_df data frame of annual intensities, output by [get_country_intensity_data()].
 #' @param max_year maximum year for which to output probabilities. Must be greater than or equal to observation_year. (If in doubt, set equal to observation year.)
-#' @param baseline_annual_p_infection average annual probability of primary infection. The default, 0.28, was estimated using age-seroprevalence data in [Gostic et al. 2016](https://doi.org/10.1128/mBio.00204-19).
+#' @param baseline_annual_p_infection average annual probability of primary infection. The default, 0.28, was estimated using age-seroprevalence data in \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)}.
 #'
 #' @return a vector whose entries show the probability that a person born
 #' in year 0 was first infected by influenza in year 0, 1, 2, 3, ...12
@@ -107,7 +107,7 @@ to_long_df <- function(outlist) {
 #' @param annual_frequencies an optional input allowing users to specify custom circulation frequencies for arbitrary types of imprinting in order to study, e.g. imprinting to specific strains, clades, or imprinting by vaccination. If nothing is input, the default is to calculate subtype-specific probabilities (possible imprinting types are A/H1N1, A/H2N2, A/H3N2, or naive). See Details.
 #' @param df_format must be either 'long' (default) or 'wide'. Controls whether the output data frame is in long format (with a single column for calculated probabilities and a second column for imprinting subtype), or wide format (with four columns, H1N1, H2N2, H3N2, and naive) showing the probability of each imprinting status.
 #'
-#' @details Imprinting probabilities are calculated following [Gostic et al. 2016](https://doi.org/10.1128/mBio.00204-19). Briefly, the model first calculates the probability that an individual's first influenza infection occurs 0, 1, 2, ... 12 years after birth using a modified geometric waiting time model. The annual circulation intensities output by [get_country_intensity_data()] scale the probability of primary infection in each calendar year.
+#' @details Imprinting probabilities are calculated following \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)}. Briefly, the model first calculates the probability that an individual's first influenza infection occurs 0, 1, 2, ... 12 years after birth using a modified geometric waiting time model. The annual circulation intensities output by [get_country_intensity_data()] scale the probability of primary infection in each calendar year.
 #'
 #' Then, after calculating the probability of imprinting 0, 1, 2, ... calendar years after birth, the model uses data on which subtypes circulated in each calendar year (from [get_country_cocirculation_data()]) to estimate that probability that a first infection was caused by each subtype. See [get_country_cocirculation_data()] for details about the underlying data sources.
 #'
