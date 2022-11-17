@@ -66,7 +66,7 @@ library(ggplot2)
 
 # 2. Use the package to calculate imprinting probabilities
 
-The main reason to use the `imprinting` package is to calculate birth year-specific probabilities of imprinting to a specific subtype of influenza A. You can read more about the biology and methods behind these calculations in [Gostic et al. 2016](https://doi.org/10.1126/science.aag1322).
+The main reason to use the `imprinting` package is to calculate birth year-specific probabilities of imprinting to a specific subtype of influenza A. You can read more about the biology and methods behind these calculations in [Gostic et al. (2016)](https://doi.org/10.1126/science.aag1322).
 
 ## 2.1 Calculate imprinting probabilities for one country and year of observation
 
