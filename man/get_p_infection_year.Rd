@@ -45,18 +45,18 @@ This function modifies the geometric model above to account for changes in annua
 # probabilities of primary infection in 2000, 2001, ... 2012:
 get_p_infection_year(
   birth_year = 2000,
-  observation_year = 2022,
-  intensity_df = get_country_intensity_data("Canada", 2022),
-  max_year = 2022
+  observation_year = 2025,
+  intensity_df = get_country_intensity_data("Canada", 2025),
+  max_year = 2025
 )
 
 # If the cohort is still under age 12 at the time of observation, return
 # a truncated vector of probabilities:
 get_p_infection_year(
   birth_year = 2020,
-  observation_year = 2022,
-  intensity_df = get_country_intensity_data("Mexico", 2022),
-  max_year = 2022
+  observation_year = 2025,
+  intensity_df = get_country_intensity_data("Mexico", 2025),
+  max_year = 2025
 )
 
 }

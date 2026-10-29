@@ -1,0 +1,70 @@
+# Plot imprinting probabilities for a single country and year
+
+Generate a stacked barplot, where each bar represents a birth cohort,
+and the colors within the bar show the probabilities that someone born
+in that cohort has a particular imprinting status. If the data frame
+contains more than one country or observation year, the first
+country-year is plotted by default. Specify other countries and years
+using the country and year options.
+
+## Usage
+
+``` r
+plot_one_country_year(imprinting_df, country = NULL, year = NULL)
+```
+
+## Arguments
+
+- imprinting_df:
+
+  A long data frame of imprinted probabilities output by
+  [`get_imprinting_probabilities()`](https://cobeylab.github.io/imprinting/reference/get_imprinting_probabilities.md).
+  If the data frame contains more than one country and year, on the
+  first will be plotted.
+
+- country:
+
+  An optional country name to plot. The input country name must exist in
+  the imprinting_df.
+
+- year:
+
+  Similar to country, and optional input specifying the year for which
+  to plot.
+
+## Value
+
+No return value. Opens a plot of the data frame.
+
+## Examples
+
+``` r
+# Generate imprinting probabilities for one country and year
+imprinting_df <- get_imprinting_probabilities(
+  observation_years = 1920,
+  countries = "Aruba"
+)
+plot_one_country_year(imprinting_df)
+
+
+# If we generate probabilities for more than one country and year,
+imprinting_df <- get_imprinting_probabilities(
+  observation_years = c(1922, 1925),
+  countries = c(
+    "Algeria",
+    "South Africa"
+  )
+)
+
+# The default is to plot the first country year in the outputs
+plot_one_country_year(imprinting_df)
+
+
+# Or, specify a country and year of interest (both must exist in the
+# imprinting_df).
+plot_one_country_year(imprinting_df,
+  country = "South Africa",
+  year = 1925
+)
+
+```

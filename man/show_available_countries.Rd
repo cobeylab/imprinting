@@ -10,7 +10,7 @@ show_available_countries()
 A data frame of valid country names.
 }
 \description{
-Lists all available countries, with valid spelling and formatting. Each country in the list matches or can be mapped to a country with data in \href{https://apps.who.int/flumart/Default?ReportNo=12}{WHO Flu Mart}. (Note: for convenience, this package sometimes uses different country names or spellings than Flu Mart.)
+Lists all available countries, with valid spelling and formatting. Each country in the list matches or can be mapped to a country with data in \href{https://www.who.int/tools/flunet}{WHO FluNet}. (Note: for convenience, this package sometimes uses different country names or spellings than FluNet.)
 }
 \examples{
 show_available_countries()
