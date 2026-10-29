@@ -38,7 +38,7 @@ China,China,western pacific
 Colombia,Colombia,americas
 Congo,Congo,africa
 Costa Rica,Costa Rica,americas
-Cote d'Ivoire,Cote d'Ivoire,africa
+Cote d'Ivoire,Côte d’Ivoire,africa
 Croatia,Croatia,europe
 Cuba,Cuba,americas
 Cyprus,Cyprus,europe
@@ -72,7 +72,7 @@ Honduras,Honduras,americas
 Hungary,Hungary,europe
 Iceland,Iceland,europe
 India,India,southeast asia
-Indonesia,Indonesia,southeast asia
+Indonesia,Indonesia,western pacific
 Iran,Iran (Islamic Republic of),eastern mediterranean
 Iraq,Iraq,eastern mediterranean
 Ireland,Ireland,europe
@@ -83,7 +83,7 @@ Japan,Japan,western pacific
 Jordan,Jordan,eastern mediterranean
 Kazakhstan,Kazakhstan,europe
 Kenya,Kenya,africa
-Kosovo,Kosovo (in accordance with Security Council resolution 1244 (1999)),europe
+Kosovo,Kosovo (in accordance with UN Security Council resolution 1244 (1999)),europe
 Kuwait,Kuwait,eastern mediterranean
 Kyrgyzstan,Kyrgyzstan,europe
 Laos,Lao People's Democratic Republic,western pacific
@@ -108,7 +108,7 @@ Mozambique,Mozambique,africa
 Myanmar,Myanmar,southeast asia
 Namibia,Namibia,africa
 Nepal,Nepal,southeast asia
-Netherlands,Netherlands,europe
+Netherlands,Netherlands (Kingdom of the),europe
 New Caledonia,New Caledonia,western pacific
 New Zealand,New Zealand,western pacific
 Nicaragua,Nicaragua,americas
@@ -119,7 +119,7 @@ North Macedonia,North Macedonia,europe
 Norway,Norway,europe
 Oman,Oman,eastern mediterranean
 Pakistan,Pakistan,eastern mediterranean
-Palestine,West Bank and Gaza Strip,eastern mediterranean
+Palestine,"occupied Palestinian territory, including east Jerusalem",eastern mediterranean
 Panama,Panama,americas
 Papua New Guinea,Papua New Guinea,western pacific
 Paraguay,Paraguay,americas
@@ -159,9 +159,9 @@ Timor,Timor-Leste,southeast asia
 Togo,Togo,africa
 Trinidad and Tobago,Trinidad and Tobago,americas
 Tunisia,Tunisia,eastern mediterranean
-Turkey,Turkey,europe
+Turkey,Türkiye,europe
 Turkmenistan,Turkmenistan,europe
-Turks and Caicos,Turks and Caicos Is.,americas
+Turks and Caicos,Turks and Caicos Islands,americas
 Uganda,Uganda,africa
 Ukraine,Ukraine,europe
 United Arab Emirates,United Arab Emirates,eastern mediterranean

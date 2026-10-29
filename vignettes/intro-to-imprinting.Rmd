@@ -73,14 +73,14 @@ The main reason to use the `imprinting` package is to calculate birth year-speci
 Use the function `get_imprinting_probabilities()`. Run `?get_imprinting_probabilities` for help.
 
 ```{r}
-get_imprinting_probabilities(observation_years = 2022, countries = "United States")
+get_imprinting_probabilities(observation_years = 2025, countries = "United States")
 ```
 The function returns a tibble wtih five columns: `subtype`, `year`, `country`, `birth_year`, and `imprinting_prob`. The column `imprinting_prob` gives the probability that someone born in `birth_year` and observed in `year` has imprinted to `subtype`.
 
 We can run the same command use the `df_format='wide'` option to output the same results in wide format. This displays all imprinting probabilities for the cohort side-by-side
 
 ```{r}
-get_imprinting_probabilities(observation_years = 2022, 
+get_imprinting_probabilities(observation_years = 2025, 
                              countries = "United States", 
                              df_format = 'wide')
 ```
@@ -94,13 +94,13 @@ E.g. consider the cohort born in 2000:
 * If the observation year is 2005, then this birth cohort is five years old, and still young enough to remain naive to influenza. The outputs below show that 22.9% of the cohort has not yet imprinted to any subtype.
 * If we calculate imprinting probabilities for the same birth cohort observed in 2011 (at age 11), the model shows that most of the cohort has imprinted, but there is still a very small non-zero probability of remaining naive.
 * When the cohort reaches age 12, (observation year 2012) the model enforces the assumption that everyone in the cohort has imprinted. It normalizes the probabilities of subtype-specific imprinting so that the H1N1, H2N2, and H3N2-specific probabilities sum to 1, and it sets the naive probability to zero.
-* Once the cohort reaches age 12, imprinting probabilities are fixed. The outputs below show that imprinting probabilities for the 2000 cohort are identical if observed at age 12 (in 2012), or at age 22 (in 2022).
+* Once the cohort reaches age 12, imprinting probabilities are fixed. The outputs below show that imprinting probabilities for the 2000 cohort are identical if observed at age 12 (in 2012), or at age 25 (in 2025).
 
 Note: we added the age_at_observation column to the outputs below for clarity.
 
 
 ```{r}
-get_imprinting_probabilities(observation_years = c(2005, 2011, 2012, 2022), 
+get_imprinting_probabilities(observation_years = c(2005, 2011, 2012, 2025), 
                              countries = "United States", 
                              df_format = 'wide') %>%
   dplyr::filter(birth_year == 2000) %>%
@@ -120,7 +120,7 @@ show_available_countries() %>%
 ## 2.3 Generate probabilities for many countries and observation years
 
 ```{r}
-many_probabilities = get_imprinting_probabilities(observation_years = c(2000, 2019, 2022),
+many_probabilities = get_imprinting_probabilities(observation_years = c(2000, 2019, 2025),
                                                   countries = c('Brazil', 'Afghanistan', 'Estonia', 'Finland')) 
 ## Store the outputs in a variable called many_probabilities
 many_probabilities ## View the outputs in the console
@@ -171,11 +171,11 @@ plot_many_country_years(many_probabilities)
 # 4. Explore the underlying data and components of the imprinting probabilities
 
 
-Get the fraction of influenza circulation caused by each subtype in each epidemic year from 1918-2022 in the United States using `get_country_cocirculation`.
+Get the fraction of influenza circulation caused by each subtype in each epidemic year from 1918-2025 in the United States using `get_country_cocirculation`.
 Run `?get_country_cocirculation_data` for notes on data sources.
 
 ```{r}
-get_country_cocirculation_data('United States', 2022)
+get_country_cocirculation_data('United States', 2025)
 ```
 
 Get the circulation intensity of influenza A in each epidemic year using `get_country_intensity_data()`.
@@ -185,7 +185,7 @@ Get the circulation intensity of influenza A in each epidemic year using `get_co
 See `?get_country_intensity_data` for details on underlying data.
 
 ```{r}
-get_country_intensity_data(country = 'China', max_year = 2022)
+get_country_intensity_data(country = 'China', max_year = 2025)
 ```
 
 ## Get the probability that an individual imprinted 0, 1, 2, ... 12 years after birth
@@ -194,9 +194,9 @@ Use the function `get_p_infection_year()`
 
 ```{r}
 probs = get_p_infection_year(birth_year = 2000,
-                     observation_year = 2022,
-                     intensity_df = get_country_intensity_data('Mexico', 2022),
-                     max_year = 2022)
+                     observation_year = 2025,
+                     intensity_df = get_country_intensity_data('Mexico', 2025),
+                     max_year = 2025)
 names(probs) = as.character(2000+(0:12))
 probs
 sum(probs) ## Raw probabilities are not yet normalized.

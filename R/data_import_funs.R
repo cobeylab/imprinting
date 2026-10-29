@@ -58,7 +58,7 @@ check_max_year <- function(max_year) {
 
 #' Show a list of all available countries
 #'
-#' Lists all available countries, with valid spelling and formatting. Each country in the list matches or can be mapped to a country with data in [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12). (Note: for convenience, this package sometimes uses different country names or spellings than Flu Mart.)
+#' Lists all available countries, with valid spelling and formatting. Each country in the list matches or can be mapped to a country with data in [WHO FluNet](https://www.who.int/tools/flunet). (Note: for convenience, this package sometimes uses different country names or spellings than FluNet.)
 #' @return A data frame of valid country names.
 #' @examples show_available_countries()
 #' @export
@@ -86,6 +86,8 @@ show_available_regions <- function() {
 #' Look up a country's WHO region
 #'
 #' @param this.country name of the input country (a string)
+#'
+#' @details Region assignments follow WHO FluNet. Indonesia is assigned to the Western Pacific region, following its move from the South-East Asia region on 23 May 2025. FluNet applies this assignment to Indonesia's full record (2004 on), so Indonesia's data count toward the Western Pacific regional totals in all years. Package versions before 0.2.0 assigned Indonesia to South-East Asia, so Indonesia's regional fallback data, in every year, now come from the Western Pacific.
 #'
 #' @return Name of the corresponding WHO region
 #'
@@ -121,7 +123,7 @@ get_WHO_region <- function(this.country) {
 #'
 #' * For years 1918-1976 only one influenza A subtype circulated, so all fractions are 0 or 1.
 #' * From 1977-1996 H1N1 and H3N2 both circulated. `get_template_data()` reports the fraction of influenza A-positive specimens of each subtype observed in US flu surveillance. See [Thompson et al. JAMA, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750), Table 1.
-#' * Country-specific data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12) will be appended to this template in later steps.
+#' * Country-specific data from [WHO FluNet](https://www.who.int/tools/flunet) will be appended to this template in later steps.
 #'
 #' @return A tibble with the following columns:
 #' * year
@@ -195,7 +197,7 @@ get_template_data <- function() {
 
 #' Return raw flu surveillance data for a specific WHO region
 #'
-#' Load and return a tibble containing raw influenza surveillance data, aggregated across all countries in the WHO region of interest. Data are from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12).
+#' Load and return a tibble containing raw influenza surveillance data, aggregated across all countries in the WHO region of interest. Data are from [WHO FluNet](https://www.who.int/tools/flunet).
 #'
 #' @param region name of WHO region. Run `show_available_regions()` for a list of options.
 #' @param max_year results will be output for all available years up to `max_year`.
@@ -203,12 +205,14 @@ get_template_data <- function() {
 #' @returns A tibble with the following columns:
 #'
 #' * `WHOREGION`: name of WHO region.
-#' * `Year`: calendar year .
+#' * `Year`: year of surveillance. Weeks are assigned to years following ISO 8601 week numbering.
 #' * `n_H1N1`, `n_H2N2`, `n_H3N2`: number of influenza specimens that tested positive for each influenza A subtype.
 #' * `n_A`: total specimens positive for influenza A (= `n_H1N1` + `n_H2N2` + `n_H3N2`).
 #' * `n_BYam`, `n_BVic`: number of specimens positive for each lineage of influenza B: Victoria or Yamagata.
 #' * `n_B`: total specimens positive for influenza B.
 #' * `n_processed`: total specimens processed.
+#'
+#' @details Regional totals include all countries and areas that WHO FluNet assigns to the region. See [get_WHO_region()] for a note on Indonesia, whose reassignment to the Western Pacific region changes the South-East Asia and Western Pacific totals from 2004 on relative to package versions before 0.2.0.
 #'
 #' @examples get_regional_inputs_1997_to_present("americas", 2017)
 #'
@@ -234,20 +238,20 @@ get_regional_inputs_1997_to_present <- function(region,
 
 #' Return raw flu surveillance data for a specific country
 #'
-#' Load and return a tibble containing raw influenza surveillance data for the country of interest. Data are from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12).
+#' Load and return a tibble containing raw influenza surveillance data for the country of interest. Data are from [WHO FluNet](https://www.who.int/tools/flunet).
 #'
 #' @param country name of country. Run `show_available_countries()` for a list of options.
 #' @param max_year results will be output for all available years up to `max_year`.
 #'
 #' @returns A tibble with the following columns:
 #'
-#' * `Country`: name of WHO region
-#' * `Year`: calendar year of surveillance
+#' * `Country`: name of country
+#' * `Year`: year of surveillance. Weeks are assigned to years following ISO 8601 week numbering.
 #' * `n_processed`: total specimens processed
 #'
 #' @examples
 #' get_country_inputs_1997_to_present("Aruba", 1998)
-#' get_country_inputs_1997_to_present("Honduras", 2022)
+#' get_country_inputs_1997_to_present("Honduras", 2025)
 #'
 #' @export
 get_country_inputs_1997_to_present <- function(country,
@@ -259,7 +263,7 @@ get_country_inputs_1997_to_present <- function(country,
   ## Throw an error and a help message if region doesn't exist
   valid_regions <- readRDS(system.file("extdata", "valid_regions.rds", package = "imprinting"))
   if (!who_region %in% valid_regions) {
-    stop(sprintf('No files found for region: "%s" \nValid regions are: %s\nSee https://en.wikipedia.org/wiki/List_of_WHO_regions for a list of WHO regions.\nNew data files can be obtained at WHO FluMart - https://apps.who.int/flumart/Default?ReportNo=12', who_region, paste(valid_regions, sep = ", ")))
+    stop(sprintf('No files found for region: "%s" \nValid regions are: %s\nSee https://en.wikipedia.org/wiki/List_of_WHO_regions for a list of WHO regions.\nNew data files can be obtained at WHO FluNet - https://www.who.int/tools/flunet', who_region, paste(valid_regions, sep = ", ")))
   }
   if (max_year <= 1996) {
     warning("Country-specific data are not available prior to 1997. Returning a NULL result.")
@@ -287,7 +291,7 @@ get_country_inputs_1997_to_present <- function(country,
 #'
 #' * Historical assumptions: From 1918-1956, we assume only H1N1 circulated. From 1957-1967, we assume only H2N2 circulated. From 1968-1976, we assume only H3N2 circulated.
 #' * [Thompson et al. JAMA, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750): From 1977-1996 we pull data on the relative dominance of H1N1 and H3N2 from Table 1 of Thompson et al. 2003, which reports surveillance data collected in the United States.
-#' * From 1997-present, we pull in country or region-specific data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12) on the fraction of specimens collected in routine influenza surveillance that test positive for each subtype. Country-specific data are the default. Regional data, then global data are used if the number of country or region-specific specimens is insufficient. [get_template_data()] imports the data for 1918-1996. [get_country_inputs_1997_to_present()] and [get_regional_inputs_1997_to_present()] import the data for 1997 on.
+#' * From 1997-present, we pull in country or region-specific data from [WHO FluNet](https://www.who.int/tools/flunet) on the fraction of specimens collected in routine influenza surveillance that test positive for each subtype. Country-specific data are the default. Regional data, then global data are used if the number of country or region-specific specimens is insufficient. [get_template_data()] imports the data for 1918-1996. [get_country_inputs_1997_to_present()] and [get_regional_inputs_1997_to_present()] import the data for 1997 on.
 #'
 #' @param country country of interest. Run `show_available_countries()` for a list of valid inputs.
 #' @param max_year last year of interest. Results will be generated from 1918:max_year.
@@ -298,7 +302,7 @@ get_country_inputs_1997_to_present <- function(country,
 #'
 #' @examples
 #' get_country_cocirculation_data("United States", "2019")
-#' get_country_cocirculation_data("Laos", "2022", min_samples = 40)
+#' get_country_cocirculation_data("Laos", "2025", min_samples = 40)
 #'
 #' @seealso \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)} for detailed methods.
 #'
@@ -392,7 +396,7 @@ get_country_cocirculation_data <- function(country,
 #' `get_country_intensity data()` returns data on the annual intensity of influenza circulation in each calendar year. Following \doi{https://doi.org/10.1126/science.aag1322}{Gostic et al. Science, (2016)}, we define 1 as the average intensity. Seasons with intensities greater than 1 have more flu A circulation than average, and seasons with intensities less than 1 are mild.
 #'
 #' @details
-#' For 1918-1996, we use annual intensities from Gostic et al., Science, (2016). For 1997-present, we calculate country or region-specific intensities using surveillance data from [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12). Intensity is calculated as:
+#' For 1918-1996, we use annual intensities from Gostic et al., Science, (2016). For 1997-present, we calculate country or region-specific intensities using surveillance data from [WHO FluNet](https://www.who.int/tools/flunet). Intensity is calculated as:
 #'  \[fraction of processed samples positive for flu A\]/\[mean fraction of processed samples positive for flu A\].
 #'  Country-specific data are used by default. Regional or global data are substituted when country-specific data contain too few observations or fail quality checks. Global data are only used in years when regional data are insufficient.
 #'

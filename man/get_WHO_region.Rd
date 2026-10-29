@@ -15,6 +15,9 @@ Name of the corresponding WHO region
 \description{
 Look up a country's WHO region
 }
+\details{
+Region assignments follow WHO FluNet. Indonesia is assigned to the Western Pacific region, following its move from the South-East Asia region on 23 May 2025. FluNet applies this assignment to Indonesia's full record (2004 on), so Indonesia's data count toward the Western Pacific regional totals in all years. Package versions before 0.2.0 assigned Indonesia to South-East Asia, so Indonesia's regional fallback data, in every year, now come from the Western Pacific.
+}
 \examples{
 get_WHO_region("Germany")
 get_WHO_region("China")

@@ -22,7 +22,7 @@ A tibble with the following columns:
 \itemize{
 \item For years 1918-1976 only one influenza A subtype circulated, so all fractions are 0 or 1.
 \item From 1977-1996 H1N1 and H3N2 both circulated. \code{get_template_data()} reports the fraction of influenza A-positive specimens of each subtype observed in US flu surveillance. See \href{https://jamanetwork.com/journals/jama/fullarticle/195750}{Thompson et al. JAMA, 2003}, Table 1.
-\item Country-specific data from \href{https://apps.who.int/flumart/Default?ReportNo=12}{WHO Flu Mart} will be appended to this template in later steps.
+\item Country-specific data from \href{https://www.who.int/tools/flunet}{WHO FluNet} will be appended to this template in later steps.
 }
 }
 \seealso{

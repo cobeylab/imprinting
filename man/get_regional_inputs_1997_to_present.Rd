@@ -15,7 +15,7 @@ get_regional_inputs_1997_to_present(region, max_year)
 A tibble with the following columns:
 \itemize{
 \item \code{WHOREGION}: name of WHO region.
-\item \code{Year}: calendar year .
+\item \code{Year}: year of surveillance. Weeks are assigned to years following ISO 8601 week numbering.
 \item \code{n_H1N1}, \code{n_H2N2}, \code{n_H3N2}: number of influenza specimens that tested positive for each influenza A subtype.
 \item \code{n_A}: total specimens positive for influenza A (= \code{n_H1N1} + \code{n_H2N2} + \code{n_H3N2}).
 \item \code{n_BYam}, \code{n_BVic}: number of specimens positive for each lineage of influenza B: Victoria or Yamagata.
@@ -24,7 +24,10 @@ A tibble with the following columns:
 }
 }
 \description{
-Load and return a tibble containing raw influenza surveillance data, aggregated across all countries in the WHO region of interest. Data are from \href{https://apps.who.int/flumart/Default?ReportNo=12}{WHO Flu Mart}.
+Load and return a tibble containing raw influenza surveillance data, aggregated across all countries in the WHO region of interest. Data are from \href{https://www.who.int/tools/flunet}{WHO FluNet}.
+}
+\details{
+Regional totals include all countries and areas that WHO FluNet assigns to the region. See \code{\link[=get_WHO_region]{get_WHO_region()}} for a note on Indonesia, whose reassignment to the Western Pacific region changes the South-East Asia and Western Pacific totals from 2004 on relative to package versions before 0.2.0.
 }
 \examples{
 get_regional_inputs_1997_to_present("americas", 2017)

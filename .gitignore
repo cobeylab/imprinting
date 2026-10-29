@@ -48,6 +48,7 @@ vignettes/*.pdf
 **/*.jpeg
 **/*.pdf
 **/*.png
+!data-raw/validation/*.png
 **/*.tiff
 
 ## DS_store

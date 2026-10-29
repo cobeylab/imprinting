@@ -42,10 +42,10 @@ See \code{vignette("custom-imprinting-types")} for use of a custom \code{annual_
 \examples{
 # ===========================================================
 # Get imprinting probabilities for one country and year
-get_imprinting_probabilities(2022, "United States")
+get_imprinting_probabilities(2025, "United States")
 # ===========================================================
 # Return the same outputs in wide format
-get_imprinting_probabilities(2022,
+get_imprinting_probabilities(2025,
   "United States",
   df_format = "wide"
 )

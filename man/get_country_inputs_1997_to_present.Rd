@@ -14,16 +14,16 @@ get_country_inputs_1997_to_present(country, max_year)
 \value{
 A tibble with the following columns:
 \itemize{
-\item \code{Country}: name of WHO region
-\item \code{Year}: calendar year of surveillance
+\item \code{Country}: name of country
+\item \code{Year}: year of surveillance. Weeks are assigned to years following ISO 8601 week numbering.
 \item \code{n_processed}: total specimens processed
 }
 }
 \description{
-Load and return a tibble containing raw influenza surveillance data for the country of interest. Data are from \href{https://apps.who.int/flumart/Default?ReportNo=12}{WHO Flu Mart}.
+Load and return a tibble containing raw influenza surveillance data for the country of interest. Data are from \href{https://www.who.int/tools/flunet}{WHO FluNet}.
 }
 \examples{
 get_country_inputs_1997_to_present("Aruba", 1998)
-get_country_inputs_1997_to_present("Honduras", 2022)
+get_country_inputs_1997_to_present("Honduras", 2025)
 
 }
