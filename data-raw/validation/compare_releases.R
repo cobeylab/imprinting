@@ -16,6 +16,7 @@ baseline_ref <- if (length(args) >= 1) args[1] else "v0.1.1"
 out_dir <- "data-raw/validation"
 observation_years <- c(2000, 2010, 2019, 2021, 2022)
 plot_year <- 2021 ## Observation year shown in the plots
+focus_country <- "United States" ## Country shown on its own in plot 4
 
 ## Extract the baseline package ------------------------------------------------
 baseline_dir <- file.path(tempdir(), "imprinting-baseline")
@@ -189,5 +190,25 @@ p3 <- ggplot(intensity, aes(Year, intensity, colour = data)) +
   theme_validation +
   theme(legend.position = "top")
 ggsave(file.path(out_dir, "plot3_europe_intensity.png"), p3, width = 10, height = 5, dpi = 150, bg = surface)
+
+## 4. Before vs after for a single country
+focus <- probs %>% dplyr::filter(year == plot_year, country == focus_country)
+p4 <- ggplot(focus, aes(imprinting_prob_before, imprinting_prob_after)) +
+  geom_abline(slope = 1, intercept = 0, colour = ink2, linewidth = 0.3, linetype = "dashed") +
+  geom_point(colour = blue, alpha = 0.6, size = 1.8, stroke = 0) +
+  facet_wrap(~subtype, nrow = 1) +
+  coord_equal() +
+  scale_x_continuous(breaks = c(0, 0.5, 1)) +
+  scale_y_continuous(breaks = c(0, 0.5, 1)) +
+  labs(
+    title = sprintf("Imprinting probabilities, baseline vs working tree: %s", focus_country),
+    subtitle = sprintf(
+      "Observation year %i; one point per birth year. Dashed line: no change. Largest absolute change: %.1g.",
+      plot_year, max(focus$abs_change)
+    ),
+    x = sprintf("Probability, %s", label_before), y = sprintf("Probability, %s", label_after)
+  ) +
+  theme_validation
+ggsave(file.path(out_dir, "plot4_scatter_focus_country.png"), p4, width = 11, height = 3.8, dpi = 150, bg = surface)
 
 cat(sprintf("\nPlots written to %s/\n", out_dir))
