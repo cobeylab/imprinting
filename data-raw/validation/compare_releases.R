@@ -16,7 +16,9 @@ baseline_ref <- if (length(args) >= 1) args[1] else "v0.1.1"
 out_dir <- "data-raw/validation"
 observation_years <- c(2000, 2010, 2019, 2021, 2022)
 plot_year <- 2021 ## Observation year shown in the plots
-focus_country <- "United States" ## Country shown on its own in plot 4
+focus_country <- "United States" ## Country shown on its own in plots 4 and 5
+recent_observation_years <- 2020:2025 ## Observation years compared in plot 5
+recent_birth_years <- 1980:2020 ## Birth cohorts shown in plot 5 (born by the first observation year)
 
 ## Extract the baseline package ------------------------------------------------
 baseline_dir <- file.path(tempdir(), "imprinting-baseline")
@@ -210,5 +212,47 @@ p4 <- ggplot(focus, aes(imprinting_prob_before, imprinting_prob_after)) +
   ) +
   theme_validation
 ggsave(file.path(out_dir, "plot4_scatter_focus_country.png"), p4, width = 11, height = 3.8, dpi = 150, bg = surface)
+
+## 5. Working tree only: one country's cohorts observed in each recent year.
+## All observation years go into a single call so that intensities are normalized
+## over the same 1997-max_year period in every row.
+recent <- callr::r(function(pkg_path, years, country) {
+  pkgload::load_all(pkg_path, quiet = TRUE)
+  get_imprinting_probabilities(years, country)
+}, args = list(pkg_path = getwd(), years = recent_observation_years, country = focus_country)) %>%
+  dplyr::filter(birth_year %in% recent_birth_years)
+stopifnot(all(recent$imprinting_prob[recent$subtype == "A/H2N2"] == 0))
+recent <- recent %>%
+  dplyr::filter(subtype != "A/H2N2") %>%
+  mutate(subtype = factor(subtype, levels = c("naive", "A/H3N2", "A/H1N1")))
+## Cohorts whose 13 possible first-infection years end before the first observation year are fixed
+last_fixed_cohort <- min(recent_observation_years) - 12
+p5 <- ggplot(recent, aes(birth_year, imprinting_prob, fill = subtype)) +
+  geom_col(width = 0.85, colour = surface, linewidth = 0.25) +
+  facet_wrap(~year, ncol = 1, strip.position = "right") +
+  scale_fill_manual(
+    values = c("A/H1N1" = blue, "A/H3N2" = "#eb6834", "naive" = "#c9c8c2"),
+    breaks = c("A/H1N1", "A/H3N2", "naive"), name = NULL
+  ) +
+  scale_x_continuous(breaks = seq(min(recent_birth_years), max(recent_birth_years), 5), expand = expansion(add = 0.6)) +
+  scale_y_continuous(breaks = c(0, 0.5, 1)) +
+  labs(
+    title = sprintf(
+      "%s: imprinting probabilities by birth year, observed %i–%i",
+      focus_country, min(recent_observation_years), max(recent_observation_years)
+    ),
+    subtitle = sprintf(
+      "Working-tree data; one row per observation year. Cohorts born up to %i are fixed by construction across these rows;\nonly younger cohorts, whose possible first-infection years reach %i or later, can change. A/H2N2 is 0 for these cohorts.",
+      last_fixed_cohort, min(recent_observation_years) + 1
+    ),
+    x = "Birth year", y = "Imprinting probability"
+  ) +
+  theme_validation +
+  theme(
+    panel.grid.major.x = element_blank(),
+    strip.text.y.right = element_text(colour = ink, face = "bold", angle = 0),
+    legend.position = "top", legend.justification = "left"
+  )
+ggsave(file.path(out_dir, "plot5_recent_years_focus_country.png"), p5, width = 11, height = 9, dpi = 150, bg = surface)
 
 cat(sprintf("\nPlots written to %s/\n", out_dir))
