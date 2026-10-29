@@ -25,3 +25,13 @@ Scripts and raw inputs used to build the data files in `inst/extdata/`. Run `dat
 ### Legacy data
 
 `legacy-flumart-2022-05/` (formerly `who/`) holds the WHO FluMart per-region exports used up to package version 0.1.1. Each file's preamble says it was generated on 10/05/2022 or 11/05/2022 UTC, which we read as 10–11 May 2022 because the data end at ISO week 19 of 2022 (9–15 May). Each preamble also records `Data from: All sites`. FluMart has been retired. The pipeline no longer reads these files; they are kept for reference and for comparing old and new data.
+
+## Validation
+
+`validation/compare_releases.R` compares imprinting probabilities for every country between a baseline git ref (default `v0.1.1`) and the working tree. It prints summaries of the changes and writes the plots in `validation/`. Run it from the repository root after rebuilding the data:
+
+```sh
+Rscript data-raw/validation/compare_releases.R [baseline_ref]
+```
+
+The committed plots compare v0.1.1 with the 2026-10-29 FluNet build.

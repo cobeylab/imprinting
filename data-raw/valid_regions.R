@@ -1,2 +1,4 @@
-valid_regions <- list.files("data-raw/who/")
+source("data-raw/load_data.R")
+
+valid_regions <- WHO_REGIONS$region
 saveRDS(valid_regions, "inst/extdata/valid_regions.rds")
