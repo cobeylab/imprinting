@@ -15,7 +15,7 @@ imprinting is an R package to reconstruct birth year-specific probabilities of i
 By default the package calculates subtype-specific probabilities of imprinting to H1N1, H2N2, and H3N2, but it is possible to calculate other kinds of imprinting probabilities (e.g. clade-level, strain-level, vaccination) using user-provided circulation frequencies. We may consider including influenza B-specific probabilities in future updates if there is demand. Please submit an [issue](https://github.com/cobeylab/imprinting/issues) to let us know if you need influenza B-specific functionality.
 
 * `get_imprinting_probabilities()` returns a data frame containing birth year-specific probabilities of imprinting to H1N1, H2N2, or H3N2 for an individual in each input country and year of observation.
-* `show_available_countries()` lists the available countries (those with data in [WHO Flu Mart](https://apps.who.int/flumart/Default?ReportNo=12)), with valid spellings.
+* `show_available_countries()` lists the available countries (those with data in [WHO FluNet](https://www.who.int/tools/flunet)), with valid spellings.
 * `plot_one_country_year()` and `plot_many_country_years()` generates plots using the outputs of `get_imprinting_probabilites()`.
 
 The generated probabilities may be modified, plotted, and used in independent research. Please cite [Gostic et al. (2016)](https://doi.org/10.1126/science.aag1322), and this package (`citation("imprinting")`).
@@ -33,43 +33,55 @@ devtools::install_github("cobeylab/imprinting")
 
 # Usage
 
-```r
+``` r
 library(imprinting)
 
 
 ## Get imprinting probabilities
-probs = get_imprinting_probabilities(observation_years = c(2000, 2022),
+probs = get_imprinting_probabilities(observation_years = c(2000, 2025),
                              countries = c('United States', 'Brazil', 'Vietnam', 'Indonesia'))
 probs
-#> # A tibble: 3,360 × 5
+#> # A tibble: 3,056 × 5
 #>    year country       birth_year subtype imprinting_prob
 #>   <dbl> <chr>              <dbl> <chr>             <dbl>
-#> 1  2000 United States       2022 A/H1N1        0.297    
-#> 2  2022 United States       2022 A/H1N1        0.0000297
-#> 3  2000 Brazil              2022 A/H1N1        0.331    
-#> 4  2022 Brazil              2022 A/H1N1        0        
-#> 5  2000 Vietnam             2022 A/H1N1        0.267    
-#> # … with 3,355 more rows
+#> 1  2025 United States       2025 A/H1N1           0.0688
+#> 2  2025 Brazil              2025 A/H1N1           0.139 
+#> 3  2025 Vietnam             2025 A/H1N1           0.113 
+#> 4  2025 Indonesia           2025 A/H1N1           0.147 
+#> 5  2025 United States       2024 A/H1N1           0.0924
+#> # ℹ 3,051 more rows
 ```
 
 
-```r
+``` r
 ## Plot imprinting probabilities 
 ##  - up to five countries
 ##  - show aging of birth cohorts from first to last observation year
 plot_many_country_years(probs)
+#> Warning in geom_label(aes(x = min_obs_year - 1968, y = 0.1, label = "born 1968"), : All aesthetics have length 1, but the data has 764 rows.
+#> ℹ Please consider using `annotate()` or provide this layer with data containing
+#>   a single row.
+#> Warning in geom_segment(aes(x = min_obs_year - 1968, xend = max_obs_year - : All aesthetics have length 1, but the data has 764 rows.
+#> ℹ Please consider using `annotate()` or provide this layer with data containing
+#>   a single row.
 ```
 
-<img src="man/figures/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="100%" />
+<div class="figure">
+<img src="man/figures/unnamed-chunk-3-1.png" alt="plot of chunk unnamed-chunk-3" width="100%" />
+<p class="caption">plot of chunk unnamed-chunk-3</p>
+</div>
 
 
-```r
+``` r
 ## Plot imprinting probabilities
 ##  - select the first country year in the probs tibble by default
 plot_one_country_year(probs)
 ```
 
-<img src="man/figures/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="100%" />
+<div class="figure">
+<img src="man/figures/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4" width="100%" />
+<p class="caption">plot of chunk unnamed-chunk-4</p>
+</div>
 
 
 # Data
@@ -88,7 +100,7 @@ Cocirculation data describes the relative dominance of each influenza A subtype 
 
 * **1977-1996** Two subtypes, H1N1 and H3N2, co-circulated globally, but country-specific influenza surveillance data are not publicly available for this time period. We use data on the number of influenza specimens that tested positive for each influenza subtype in US surveillance (Table 1 of [Thompson et al. JAMA, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750)) to calculate the fraction of circulation caused by each subtype. 
 
-* **1996-present** Two subtypes, H1N1 and H3N2, continue to co-circulate globally. We pull country-specific data from WHO Flu Mart() to estimate the fraction of specimens that tested positive for subtype H1N1 or H3N2. If a country reported fewer than `min_samples` (default 30) influenza A-positive specimens in a given year, we substitute data from the country's WHO Region to ensure a sufficient sample size.
+* **1996-present** Two subtypes, H1N1 and H3N2, continue to co-circulate globally. We pull country-specific data from [WHO FluNet](https://www.who.int/tools/flunet) to estimate the fraction of specimens that tested positive for subtype H1N1 or H3N2. If a country reported fewer than `min_samples` (default 30) influenza A-positive specimens in a given year, we substitute data from the country's WHO Region to ensure a sufficient sample size.
 
 ## 2. Intensity data
 
@@ -97,7 +109,7 @@ Children are more likely to imprint in years with high levels of influenza A cir
 * **For 1918-1996**, we calculate annual intensity using the methods of [Gostic et al. (2016)](https://doi.org/10.1126/science.aag1322). From 1918-1976, intensity scores are informed by Pneumonia and Influenza excess mortaltity estimates [Housworth et al. 1974](https://academic.oup.com/aje/article-abstract/100/1/40/226436), and from 1976-1977, intensity scores are informed by the influenza A test-positive fraction reported in Table 1 of [Thompson et al. JAMA, 2003](https://jamanetwork.com/journals/jama/fullarticle/195750).
 
 
-* For **1997-present**, we calculate country or region-specific intensities using surveillance data from WHO Flu Mart. Intensity is calculated as: [fraction of processed samples positive for flu A]/[mean fraction of processed samples positive for flu A]. Country-specific data are used by default. Regional data are substituted when there are an insufficient number of country-specific specimens.
+* For **1997-present**, we calculate country or region-specific intensities using surveillance data from WHO FluNet. Intensity is calculated as: [fraction of processed samples positive for flu A]/[mean fraction of processed samples positive for flu A]. Country-specific data are used by default. Regional data are substituted when there are an insufficient number of country-specific specimens.
 
 # Funding
 

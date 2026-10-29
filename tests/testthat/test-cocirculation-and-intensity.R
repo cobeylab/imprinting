@@ -57,7 +57,7 @@ test_that("Invalid year gives an error.", {
 })
 
 test_that("Numeric (non-NA) probabilities are returned for post-2017 observation years.", {
-  obs_year <- 2022
+  obs_year <- 2025
   min_year <- 1918
 
   probs <- get_imprinting_probabilities(observation_years = obs_year, countries = c("United States"))
@@ -68,12 +68,12 @@ test_that("Numeric (non-NA) probabilities are returned for post-2017 observation
 test_that("Countries with low-quality intensity data return appropriate intensity values.", {
   intensities_Germany <- get_country_intensity_data(
     country = c("Germany"),
-    max_year = 2022,
+    max_year = 2025,
     min_specimens = 50
   )
   intensities_Iraq <- get_country_intensity_data(
     country = c("Iraq"),
-    max_year = 2022,
+    max_year = 2025,
     min_specimens = 50
   )
 
